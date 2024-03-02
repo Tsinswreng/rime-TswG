@@ -8,8 +8,10 @@ lua腳本模塊:
  * getSingleCharFromPhrase.lua 以詞定字
  * hintTrad.lua 簡體模式下提示傳統漢字
  * fillMenu.lua 單字組詞出候選
- * deleteUserWordOn0.lua 0鍵刪詞
-
+ * deleteSelectionOn0.lua 0鍵刪詞
+ * filterOnAddtionalCode.lua 針對使用輔助碼旹的filter(僅用于dks方案)
+ * limitFilter.lua 置于filters最前面㕥限制filter中候選詞的數量、㕥防後續filter處理過多不需要的候選
+ * time_translator.lua 輸出當前時間
 
 
 工具等:
@@ -20,6 +22,7 @@ lua腳本模塊:
  * HistoryDeque.lua 繼承ArrayDeque用于錄限定個數的輸入歷史
  * ut.lua 工具
  * algo.lua 工具
+ * rimeUtil.lua 工具
 
 方案:
  * dks 魔改上古音三拼
