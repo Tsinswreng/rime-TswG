@@ -4,6 +4,7 @@
 lua腳本模塊:
  * predict.lua 動態聯想詞
  * userWordCombiner.lua 輸入歷史組詞記入詞庫
+ * cmd.lua 命令、當前支持開關轉換, 輸出unicode字符
  * jp.lua 繁轉日
  * getSingleCharFromPhrase.lua 以詞定字
  * hintTrad.lua 簡體模式下提示傳統漢字
@@ -26,7 +27,7 @@ lua腳本模塊:
 
 方案:
  * dks 魔改上古音三拼
- * cangjie7-1 魔改三碼倉頡(已棄用)
+ * cangjie7-1 魔改三碼倉頡
 
 
 
@@ -44,7 +45,7 @@ lua腳本模塊:
 
 繼承ArrayDeque.lua、用于記錄有限個上屏記錄。隊列滿旹 再在隊尾添加元素 則會先使隊頭出隊。
 
-### userDict.lua
+### userWordCombiner.lua
 
 使用HistoryDeque.lua
 
