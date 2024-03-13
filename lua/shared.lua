@@ -65,7 +65,9 @@ function M.userWordCombiner.isTimeToClearDeq(commitText)
 	return false
 end
 
-
+M.predict = {
+	
+}
 
 
 return M

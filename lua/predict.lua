@@ -413,7 +413,12 @@ function M.processor.func(key, env)---@type ProcessorFn
 
 
 	pushRealInput(ctx) --- 須置于 if has_menu之前
+
 	if not ctx:has_menu() then
+		if repr == 'BackSpace' then
+			tempHisDeq:clear()
+			return k3.kNoop
+		end
 		return k3.kNoop
 	end
 	
@@ -442,13 +447,12 @@ function M.processor.func(key, env)---@type ProcessorFn
 			--return k3.kAccepted
 			return k3.kNoop 
 		--elseif key:ctrl() or repr=='Release+Control_L' or repr == 'Control+Control_L' then
-		elseif--[[  keyCode == 48 or  ]]repr == '0' then
-			
-	--elseif repr=='Control+Control_L' then
+		elseif keyCode == 48 or repr == '0' then --其實是Release+0 ?
 			local sele = ctx:get_selected_candidate()
 			local back = hisDeq:back() ---@type string
 			dyMemRemove(back..sele.text)
 			tempHisDeq:clear()
+			return k3.kAccepted
 		elseif repr=='Up' or repr == 'Release+Up' or repr == 'Down' or repr == 'Release+Down' then
 			
 		else
@@ -458,10 +462,7 @@ function M.processor.func(key, env)---@type ProcessorFn
 			--ctx:clear()
 	end
 
-	if repr == 'BackSpace' then
-		tempHisDeq:clear()
-		return k3.kNoop
-	end
+
 
 	-- if ctx.input == charToPush then
 

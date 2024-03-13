@@ -96,6 +96,31 @@ local function nodeSaveClipboard(exput, cd)
 	end
 end
 
+---@param exput string|nil
+---@param cd string|nil deprecated
+local function powershellSaveClipboard(exput, cd)
+	--local path = (rime_api.get_user_data_dir())..'/'..'_js\\printClipboard.mjs'
+	local ok, ans = pcall(function ()
+		--local cmd = 'node '.. '"'..path..'"'
+		local cmd = 'powershell.exe -command "Get-Clipboard"'
+		if exput then
+			cmd = cmd.. ' > '..'"'..exput..'"'
+		end
+		if cd then
+			local cdCmd = 'cd ' .. '"' ..cd..'"'
+			--Wat(cdCmd)
+			os.execute()
+		end
+		--Wat(cmd)
+		os.execute(cmd)
+	end)
+	if ok then
+		return ans
+	else
+		log.error(ans)
+	end
+end
+
 
 ---@param path string|nil
 ---@return string|nil
@@ -128,6 +153,7 @@ end
 
 function M.saveEtRead()
 	nodeSaveClipboard(M.outPath)
+	--powershellSaveClipboard(M.outPath) --容易卡死
 	local ans = readClipboardFile()
 	if not ans then
 		return ''
@@ -157,13 +183,11 @@ function M.read()
 	return ans
 end
 
+---@deprecated
 function M.getClipboard_fn()
 	local cmd = "powershell.exe -Command Get-Clipboard"
-	Wat('a')
 	local handle = io.popen(cmd)
-	Wat('b')
 	local result = handle:read("*a")
-	Wat('c')
 	handle:close()
 	local cb = result
 	return cb

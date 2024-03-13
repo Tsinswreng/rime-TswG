@@ -22,6 +22,13 @@ if false then
 
 ---@class unknown: any
 
+
+log=log
+---@class Log
+---@field info fun(text:string)
+---@field warning fun(text:string)
+---@field error fun(text:string)
+
 ---@class ConfigList
 ---@class ConfigMap
 ---@class ConfigValue
