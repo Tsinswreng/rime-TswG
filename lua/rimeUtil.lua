@@ -2,7 +2,10 @@
 local ut = require("ut")
 local algo = require('algo')
 local M = {}
-
+M.t2s = Opencc('t2s.json')
+M.s2t = Opencc('s2t.json')
+M.t2jp = Opencc('t2jp.json')
+M.jp2t = Opencc('jp2t.json')
 
 ---@param translation Translation
 function M.yieldAllTrans(translation)
@@ -139,4 +142,128 @@ function M.seekCodesOfStr(db, str, inputCodes)
 	return ans
 end
 
+
+
+M.fullShapes = {}
+
+M.fullShapes.half__full_upper_arr = {
+	{'A','Ａ'},
+	{'B','Ｂ'},
+	{'C','Ｃ'},
+	{'D','Ｄ'},
+	{'E','Ｅ'},
+	{'F','Ｆ'},
+	{'G','Ｇ'},
+	{'H','Ｈ'},
+	{'I','Ｉ'},
+	{'J','Ｊ'},
+	{'K','Ｋ'},
+	{'L','Ｌ'},
+	{'M','Ｍ'},
+	{'N','Ｎ'},
+	{'O','Ｏ'},
+	{'P','Ｐ'},
+	{'Q','Ｑ'},
+	{'R','Ｒ'},
+	{'S','Ｓ'},
+	{'T','Ｔ'},
+	{'U','Ｕ'},
+	{'V','Ｖ'},
+	{'W','Ｗ'},
+	{'X','Ｘ'},
+	{'Y','Ｙ'},
+	{'Z','Ｚ'}
+}
+
+M.fullShapes.half__full_lower_arr = {
+	{'a','ａ'},
+	{'b','ｂ'},
+	{'c','ｃ'},
+	{'d','ｄ'},
+	{'e','ｅ'},
+	{'f','ｆ'},
+	{'g','ｇ'},
+	{'h','ｈ'},
+	{'i','ｉ'},
+	{'j','ｊ'},
+	{'k','ｋ'},
+	{'l','ｌ'},
+	{'m','ｍ'},
+	{'n','ｎ'},
+	{'o','ｏ'},
+	{'p','ｐ'},
+	{'q','ｑ'},
+	{'r','ｒ'},
+	{'s','ｓ'},
+	{'t','ｔ'},
+	{'u','ｕ'},
+	{'v','ｖ'},
+	{'w','ｗ'},
+	{'x','ｘ'},
+	{'y','ｙ'},
+	{'z','ｚ'}
+}
+
+M.fullShapes.half__full_number_arr = {
+	{'0','０'},
+	{'1','１'},
+	{'2','２'},
+	{'3','３'},
+	{'4','４'},
+	{'5','５'},
+	{'6','６'},
+	{'7','７'},
+	{'8','８'},
+	{'9','９'}
+}
+
+M.fullShapes.half__full_symbol_arr = {
+	{'+','＋'},
+	{'-','－'},
+	{'*','＊'},
+	{'/','／'},
+	{'=','＝'},
+	{'%','％'},
+	{'$','＄'},
+	{'&','＆'},
+	{'@','＠'},
+	{'#','＃'},
+	{'!','！'},
+	{'?','？'},
+	{'^','＾'},
+	{'_','＿'},
+	{'(','（'},
+	{')','）'},
+	{'[','［'},
+	{']','］'},
+	{'{','｛'},
+	{'}','｝'},
+	{'<','＜'},
+	{'>','＞'},
+	{'|','｜'},
+	{'.','．'},
+	{',','，'},
+	{':','：'},
+	{';','；'},
+	{'\'','＇'},
+	{'"','＂'},
+	{'`','｀'},
+	{'\\','＼'}
+}
+
+M.fullShapes.half__full_space_arr = {
+	{' ', '　'}
+}
+
+M.fullShapes.half__full_arr = {}
+ut.insertUnpack(
+	M.fullShapes.half__full_arr
+	,{M.fullShapes.half__full_lower_arr
+	, M.fullShapes.half__full_upper_arr
+	, M.fullShapes.half__full_number_arr
+	, M.fullShapes.half__full_symbol_arr
+	, M.fullShapes.half__full_space_arr}
+)
+
+M.fullShapes.half__full = ut.map(M.fullShapes.half__full_arr)
 return M

@@ -509,7 +509,7 @@ function Memory(engine, schema, name_space)end
 ---@field iter_dict fun(self:Memory):fun():DictEntry
 ---@field iter_user fun(self:Memory):fun():DictEntry
 -- memory:update_userdict(dictentry, 0, "") -- do nothing to userdict
--- memory:update_userdict(dictentry, 1, "") -- update entry to userdict
+-- memory:update_userdict(dictentry, 1, "") -- update entry to userdict 使原本的c加一洏非褈賦值潙一
 -- memory:update_userdict(dictentry, -1, "") -- delete entry to userdict
 --- prefix會拼在custom_code之前
 ---@field update_userdict fun(self:Memory, entry:DictEntry, commits:number, prefix:string):boolean
@@ -556,6 +556,8 @@ rime_api = rime_api ---@type Rime_api
 ---@field get_distribution_version fun():string	发布版本号
 ---@field get_user_id fun()
 ---@field regex_match fun(str:string, pattern:string):boolean
+---@field regex_search fun()
+---@field regex_replace fun(str:string, pattern:string, replacement:string):string
 
 ---@class Menu
 ---@field add_translation fun(self:Menu, translation:Translation)

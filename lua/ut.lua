@@ -64,6 +64,15 @@ end
 
 
 
+---@param strArr string[]
+function M.joinString(strArr)
+	local ans = ''
+	for i,char in ipairs(strArr)do
+		ans = ans..char
+	end
+	return ans
+end
+
 
 
 --- func desc
@@ -290,6 +299,42 @@ function M.toDeepMerge(o1, o2)
 	-- return merged
 end
 
+---@generic T,U
+---@param arr2d (T|U)[]  ---[T,U][]
+---@return table<T,U>
+function M.map(arr2d)
+	local ans = {}
+	for i,entry in ipairs(arr2d)do
+		local k = entry[1]
+		local v = entry[2]
+		ans[k] = v
+		
+	end
+	return ans
+end
+
+---@generic T
+---@param target T[]
+---@param ... T[][]
+function M.insertUnpack_deprecated(target, ...)
+	for i,arr in ipairs(...)do
+		for j,ele in ipairs(arr)do
+			table.insert(target, ele)
+		end
+	end
+end
+
+
+---@generic T
+---@param target T[]
+---@param arr T[][]
+function M.insertUnpack(target, arr)
+	for i,uarr in ipairs(arr)do
+		for j,ele in ipairs(uarr)do
+			table.insert(target, ele)
+		end
+	end
+end
 
 
 return M

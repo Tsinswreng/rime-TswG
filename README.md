@@ -29,21 +29,7 @@ lua腳本模塊:
  * dks 魔改上古音三拼
  * cangjie7-1 魔改三碼倉頡
 
-
-
-## lua
-
-### type.lua
-
-針對librime-lua提供的接口的類型聲明。在編輯器中開啓相關插件(如vscode的lua插件)後可獲得更好的代碼提示和類型檢查。
-
-### ArrayDeque.lua
-
-基于循環數組實現的雙端隊列
-
-### HistoryDeque.lua
-
-繼承ArrayDeque.lua、用于記錄有限個上屏記錄。隊列滿旹 再在隊尾添加元素 則會先使隊頭出隊。
+## lua 模塊
 
 ### userWordCombiner.lua
 
@@ -70,6 +56,25 @@ lua腳本模塊:
 
 ### jp.lua
 繁轉日
+
+### cmd.lua
+
+![alt text](img/Code_D17D2saPzf.gif)
+
+## lua工具
+
+### type.lua
+
+針對librime-lua提供的接口的類型聲明。在編輯器中開啓相關插件(如vscode的lua插件)後可獲得更好的代碼提示和類型檢查。
+
+### ArrayDeque.lua
+
+基于循環數組實現的雙端隊列
+
+### HistoryDeque.lua
+
+繼承ArrayDeque.lua、用于記錄有限個上屏記錄。隊列滿旹 再在隊尾添加元素 則會先使隊頭出隊。
+
 
 
 ## 方案

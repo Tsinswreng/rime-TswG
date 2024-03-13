@@ -276,7 +276,7 @@ local function dyMemRemove(str)
 		if de.text == str then
 			--de.custom_code = '' 叵改此。否則update旹不效。
 			local r = dyMem:update_userdict(de, -1, '')
-			Wat('deleted: '..str)
+			log.info('deleted: '..str)
 		end
 	end
 	return true
@@ -286,7 +286,7 @@ local function removeAllInDyMem()
 	dyMem:user_lookup('',true)
 	for de in dyMem:iter_user()do
 		dyMem:update_userdict(de, -1, '')
-		Wat(de.text)
+		log.info(de.text)
 	end
 end
 

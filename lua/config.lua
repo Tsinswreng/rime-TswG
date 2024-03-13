@@ -16,10 +16,22 @@ default.userWordCombiner = {
 default.cmd = {
 	prompt = '$' ---須在speller/alphabet中
 	,paramSplitter = ','
+	,useSpace = false
+	,submitKey = function (key) ---@param key KeyEvent
+		return key:repr() == 'space'
+	end
+}
+
+default.clipboard = {
+	outputFile = rime_api.get_user_data_dir() .. '/' .. 'clipboard.txt'
 }
 
 default.jp = {
 	switchName = 'japanese_kanji'
+}
+
+default.qualityHint = {
+	switchName = 'hint_quality'
 }
 
 M['dks'] = { ---@type LuaConfig
