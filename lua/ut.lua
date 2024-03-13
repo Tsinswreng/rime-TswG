@@ -87,7 +87,7 @@ end
 M.logWarnStr = logWarnStr
 
 
-local json = require("_ut/ison")
+local json = require("_lib/ison")
 
 local function stringfy(v)
 	---@param t string

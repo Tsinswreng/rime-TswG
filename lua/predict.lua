@@ -1,8 +1,10 @@
 --[[ 
 
+TsinswrengGwāng<2290019838@qq.com>
+
 在<User_Data>/rime.lua中加入:
 ```lua
-predict = require("predict")
+local predict = require("predict")
 predict_P = predict.processor
 predict_T = predict.translator
 ```

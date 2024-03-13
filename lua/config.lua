@@ -34,6 +34,10 @@ default.qualityHint = {
 	switchName = 'hint_quality'
 }
 
+default.charInPhrase = {
+	
+}
+
 M['dks'] = { ---@type LuaConfig
 	predict = {
 		charToPush = '^'
