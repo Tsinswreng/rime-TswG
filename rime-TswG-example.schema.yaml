@@ -1,0 +1,165 @@
+#2024-03-03T08:18:10.000+08:00
+# Rime schema
+# encoding: utf-8
+schema:
+  schema_id: rime-TswG-example
+  name: rime-TswG-example
+  version: ""
+  author: Tsinswreng Gwāng<2290019838@qq.com>
+  #description: |-
+
+  dependencies:
+
+# ✕ ╳ ✖ ✗ ✘ ⊙ ⬤ ● ◑ ◉　■, □ 🔤●☽
+switches:
+  - name: ascii_mode
+    states: [ 中, A ] #Ａ
+  - name: predict
+    states: ['聯-', '聯+'] # ❌
+  - name: simplification
+    states: [ 漢, 汉 ]
+  - name: english
+    states: ['英-', '英+']
+  - name: full_shape
+    states: [ ☽,⬤ ]
+  - name: japanese_kanji
+    states: ['日-', '日+']
+  # - name: prediction
+  #   states: [ 關預, 開預 ]
+    #reset: 1
+  # - name: extended_charset
+  #   states: [ 常, 廣 ]
+  #   reset: 0
+  # - name: ascii_punct
+  #   states: [ 。，, ．， ]
+  #- name:  _hide_key_hint
+    #states: [ 有, 無助记 ]  
+  - name: _hide_comment
+    states: ['註+', '註-']  #同文 有無註釋
+  - name: hint_quality
+    states: ['權-', '權+']
+    #reset: 1
+
+
+engine:
+  processors:
+    - lua_processor@init_P #初始化配置
+    - lua_processor@cmd_P 
+    - lua_processor@deleteSelectionOn0_P
+    - lua_processor@clearOnKey_P
+    - lua_processor@userWordCombiner_P
+    - lua_processor@predict_P
+    - lua_processor@getSingleCharFromPhrase
+    - ascii_composer # ※ 處理西文模式及中西文切換
+    - recognizer # ※ 與 matcher 搭配，處理符合特定規則的輸入碼，如網址、反查等
+    - key_binder # ※ 在特定條件下將按鍵綁定到其他按鍵，如重定義逗號、句號爲候選翻頁鍵
+    - speller  # ※ 拼寫處理器，接受字符按鍵，編輯輸入碼
+    - punctuator # ※ 句讀處理器，將單個字符按鍵直接映射爲文字符號
+    - navigator # ※ 處理輸入欄內的光標移動鍵
+    - selector # ※ 選字處理器，處理數字選字鍵、上、下候選定位、換頁鍵
+    - express_editor # ※ 編輯器，處理空格、回車上屏、回退鍵等
+
+  segmentors:
+    - matcher # 配合recognizer標識符合特定規則的段落，如網址、反查等，加上特定tag #!要寫在前面
+    - affix_segmentor@hiragana
+    - affix_segmentor@katakana
+    - ascii_segmentor # 標識西文段落〔譬如在西文模式下〕字母直接上屛
+    - abc_segmentor #標識常規的文字段落，加上abc這個tag
+    - punct_segmentor #標識句讀段落〔鍵入標點符號用〕加上punct這個tag
+    - fallback_segmentor #標識其他未標識段落 
+  translators:
+    - lua_translator@predict_T #
+    - lua_translator@time_translator #
+    - script_translator
+    #- reverse_lookup_translator
+    - history_translator@history
+    - punct_translator
+    #- lua_translator@fillMenuT # 稍增卡頓
+
+  filters:
+    #- uniquifier 
+    - lua_filter@limitFilter_F #
+    #- single_char_filter
+    #- cjk_minifier
+    - lua_filter@filterOnAdditionalCode_F # 
+    #- lua_filter@fillMenuF
+    #- lua_filter@tradHintF
+    - simplifier
+    #- lua_filter@simplifier
+    - lua_filter@jp_F #
+    #- lua_filter@unicodeHint_F
+    - lua_filter@qualityHint_F
+    #- lua_filter@english_filter
+    #- lua_filter@single_char_filter
+
+speller:
+  # finals: 1890-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`!@[]{}\;:'",<.>/?"%"
+  alphabet: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`!@-\\[\\]\\{\\}\\;\':\",\\./<>?^$
+  #alphabet: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`!@-\\[\\]\\{\\}\\;':\",\\./<>?^\u0008"
+  initials: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`!@\\[\\]\\{\\}\\;\':\",\\./<>?^$
+  #finals: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1890`!@%-\\[\\]\\{\\}\\;\':\",\\./<>?
+  delimiter: "%"
+  #max_code_length: 3  # 五碼頂字上屏
+  #auto_select: true
+  #auto_select_unique_candidate: true  #唯一字自动提交
+  #auto_select:_pattern: ^[a-z,\\.;]{3}[A-Z<>][a-z,\\.]?$
+
+  algebra:
+    - abbrev/^(.).+$/$1/ #簡拼
+
+translator:
+  dictionary: luna_pinyin
+  prism: luna_pinyin
+  initial_quality: 99 #設定此翻譯器出字優先級
+  spelling_hints: 8
+  enable_completion: true #提前顯示尚未輸入完整碼的字〔僅table_translator有效〕
+  enable_commit_history: false #是否對已上屛詞自動成詞〔僅table_translator有效〕
+  enable_sentence: false #是否開啓自動造句
+  enable_user_dict: true #是否開啓用戶詞典〔用戶詞典記錄動態字詞頻、用戶詞〕
+  user_dict: exampleUserDict
+  enable_encoder: false #是否開啓自動造詞〔僅table_translator有效〕
+  #max_phrase_length: 0 #最大自動成詞詞長〔僅table_translator有效〕
+  sentence_over_completion: false #在無全碼對應字而僅有逐鍵提示時也開啓智能組句〔僅table_translator有效〕
+  enable_charset_filter: true
+  encode_commit_history: true
+  # disable_user_dict_for_patterns:
+  #   - "^[]$"
+  #   - "^[]$"
+  preedit_format:
+    - xform/%/|/
+  comment_format:
+    - xform/%/|/ #分隔
+    - "xform/.*//" #清除
+
+history:
+  user_dict: true
+  dictionary: history
+  input: ";;"
+  size: 9
+  initial_quality: 999999999999 #設定此翻譯器出字優先級
+
+time_translator:
+  initial_quality: 9999
+
+abc_segmentor:
+  extra_tags:
+
+
+
+punctuator:
+  import_preset: symbols
+
+key_binder:
+  import_preset: default
+  bindings:
+    - { when: has_menu, accept: Tab, send: percent } #以tab作分隔
+    - { when: has_menu, accept: period, send: period }
+    - { when: paging, accept: minus, send: Page_Up }
+    - { when: paging, accept: plus, send: Page_Up }
+    - { when: has_menu, accept: equal, send: Page_Down }
+
+recognizer:
+  #import_preset: default
+  patterns:
+    punct: "/([0-9]|[a-z])"
+    cmd: "^\\$.+$"

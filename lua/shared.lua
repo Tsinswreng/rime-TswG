@@ -16,9 +16,12 @@ function M.loadConfig(schemaId)
 	end
 	
 	local custom = config_[schemaId]
-	local merged = ut.toDeepMerge(config_.default, custom)
-	M.config = merged
-	M.hasLoaded = true
+	if custom ~= nil then
+		local merged = ut.toDeepMerge(config_.default, custom)
+		M.config = merged
+		M.hasLoaded = true
+	end
+	
 	
 	return M.config
 end

@@ -1,6 +1,36 @@
 # rime-TswG
 自用rime-lua腳本及方案分享
 
+
+安裝:
+
+windows 小狼毫:
+最好不要直接把代碼放進你的用戶文件夾裏。建議另外建立一個文件夾並設作用戶文件夾㕥測試、無問題後再參照樣例方案按需引入你自己的方案裏
+
+1. 執行以下命令
+```
+git clone https://github.com/Tsinswreng/rime-TswG.git #或者手動下載
+cd rime-TswG
+npm i clipboardy #可選。如無此則cmd.lua中涉及到剪貼板處理的功能都不可用
+```
+2. 退出算法服務
+
+3. 把當前的用戶文件夾改名、假設你的用戶文件夾爲`User_Data` 則可改名作`_User_Data`
+
+4. 把從此倉庫下載下來的代碼文件夾改名作原本的用戶文件夾名(如`User_Data`)
+
+5. 在輸入法設定選中`rime-TswG-example`
+
+6. 重新部署
+
+7. 按`F4`或ctrl+\` 打開輸入法選單、選中`rime-TswG-example`
+
+8. 完成。
+
+測試無問題後再參照樣例方案按需引入你自己的方案裏。參照每個lua模塊的開頭的說明
+
+歡迎提出問題或想法
+
 lua腳本模塊:
  * init.lua 用于初始化配置
  * predict.lua 動態聯想詞
@@ -26,7 +56,7 @@ lua腳本模塊:
  * algo.lua 算法工具
  * rimeUtil.lua 輸入法工具
 
-方案:
+方案: (待分享)
  * dks 魔改上古音三拼
  * cangjie7-1 魔改三碼倉頡
 
@@ -110,13 +140,13 @@ lua腳本模塊:
 
 關: `$Fu`
 
-日語新字體(需要佈署jp.lua):
+日語新字體(需要部署jp.lua):
 
 開: `$jp`
 
 關: `$Jp`
 
-聯想詞(需要佈署predict.lua):
+聯想詞(需要部署predict.lua):
 
 開: `$p`
 
@@ -132,6 +162,7 @@ lua腳本模塊:
 
 * 上屏lua表達式(可當簡易計算器用)
 `$l,2-3` -> `-1`
+
 `$l,math.log(5)` -> `1.6094379124341`
 ![alt text](img/notepad++_EXKDdRCEYF.gif)
 
@@ -149,6 +180,7 @@ npm i clipboardy
 (只在windows10上測試過、直接用`powershell.exe -command "Get-Clipboard"`總是卡死、所以改用npm的clipboardy庫)
 
 獲取剪貼板的原理: lua通過`os.execute`使操作系統將剪貼板內容寫入預定的文件、然後lua讀取該文件
+
 使用旹 閃過cmd是正常現象
 
 **警告:字符過多旹輸入法和當前聚焦的窗口會卡死、需要退出算法服務**
