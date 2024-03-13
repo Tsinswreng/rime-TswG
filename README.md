@@ -32,33 +32,34 @@ npm i clipboardy #可選。如無此則cmd.lua中涉及到剪貼板處理的功�
 歡迎提出問題或想法
 
 lua腳本模塊:
- * init.lua 用于初始化配置
- * predict.lua 動態聯想詞
- * userWordCombiner.lua 輸入歷史組詞記入詞庫
- * cmd.lua 命令、當前支持開關轉換, 輸出unicode字符, 輸出lua表達式(可當計算器用), 讀取剪貼板處理內容後輸出(反轉,豎排等)
- * jp.lua 繁轉日
- * getSingleCharFromPhrase.lua 以詞定字
- * hintTrad.lua 簡體模式下提示傳統漢字
- * fillMenu.lua 單字組詞出候選
- * deleteSelectionOn0.lua 0鍵刪詞
- * filterOnAddtionalCode.lua 針對使用輔助碼旹的filter(僅用于dks方案)
- * limitFilter.lua 置于filters最前面㕥限制filter中候選詞的數量、㕥防後續filter處理過多不需要的候選
- * time_translator.lua 輸出當前時間
+* init.lua 用于初始化配置
+* predict.lua 動態聯想詞
+* userWordCombiner.lua 輸入歷史組詞記入詞庫
+* cmd.lua 命令、當前支持開關轉換, 輸出unicode字符, 輸出lua表達式(可當計算器用), 讀取剪貼板處理內容後輸出(反轉,豎排等)
+* jp.lua 繁轉日
+* getSingleCharFromPhrase.lua 以詞定字
+* hintTrad.lua 簡體模式下提示傳統漢字
+* fillMenu.lua 單字組詞出候選
+* deleteSelectionOn0.lua 0鍵刪詞
+* filterOnAddtionalCode.lua 針對使用輔助碼旹的filter(僅用于dks方案)
+* limitFilter.lua 置于filters最前面㕥限制filter中候選詞的數量、㕥防後續filter處理過多不需要的候選
+* time_translator.lua 輸出當前時間
+* clearOnKey.lua 按住shift+退格 清空輸入(原爲清除一個分段)
 
 
 工具等:
- * config.lua 用戶配置
- * shared.lua 跨模塊共享變量/函數
- * type.lua librime-lua類型聲明
- * ArrayDeque.lua 循環數組雙端隊列
- * HistoryDeque.lua 繼承ArrayDeque用于錄限定個數的輸入歷史
- * ut.lua 工具
- * algo.lua 算法工具
- * rimeUtil.lua 輸入法工具
+* config.lua 用戶配置
+* shared.lua 跨模塊共享變量/函數
+* type.lua librime-lua類型聲明
+* ArrayDeque.lua 循環數組雙端隊列
+* HistoryDeque.lua 繼承ArrayDeque用于錄限定個數的輸入歷史
+* ut.lua 工具
+* algo.lua 算法工具
+* rimeUtil.lua 輸入法工具
 
 方案: (待分享)
- * dks 魔改上古音三拼
- * cangjie7-1 魔改三碼倉頡
+* dks 魔改上古音三拼
+* cangjie7-1 魔改三碼倉頡
 
 ## lua 模塊
 
