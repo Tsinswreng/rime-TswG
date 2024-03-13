@@ -19,7 +19,7 @@ npm i clipboardy #可選。如無此則cmd.lua中涉及到剪貼板處理的功�
 
 4. 把從此倉庫下載下來的代碼文件夾改名作原本的用戶文件夾名(如`User_Data`)
 
-5. 在輸入法設定選中`rime-TswG-example`
+5. 重新開啓算法服務、並在輸入法設定選中`rime-TswG-example`
 
 6. 重新部署
 
