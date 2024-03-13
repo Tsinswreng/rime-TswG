@@ -81,7 +81,7 @@ engine:
     - lua_filter@limitFilter_F #
     #- single_char_filter
     #- cjk_minifier
-    - lua_filter@filterOnAdditionalCode_F # 
+    #- lua_filter@filterOnAdditionalCode_F # 
     #- lua_filter@fillMenuF
     #- lua_filter@tradHintF
     - simplifier
