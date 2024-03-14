@@ -125,7 +125,12 @@ lua腳本模塊:
 `春眠不覺` `眠不覺` `不覺` `覺`
 
 越靠前的字串、若有查找結果則所得候選詞權重越高
+
 ![alt text](img/notepad++_iOf77TMG27.gif)
+
+註釋可關
+
+![alt text](img/notepad++_Hk2mdipCgV.gif)
 
 已知bug:
 * 小狼毫0.15.0 按數字鍵2欲擇第二個聯想候選項旹 菜單直接消失 (同文運行相同腳本無此bug)
