@@ -136,6 +136,10 @@ lua腳本模塊:
 
 ![alt text](img/notepad++_Hk2mdipCgV.gif)
 
+同文
+
+![alt text](img/Screenrecorder-2024-03-14-23-25-58-907.gif)
+
 已知bug:
 * 小狼毫0.15.0 按數字鍵2欲擇第二個聯想候選項旹 菜單直接消失 (同文運行相同腳本無此bug)
 
