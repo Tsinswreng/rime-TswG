@@ -5,7 +5,7 @@ local M = {}
 M.t2s = Opencc('t2s.json')
 M.s2t = Opencc('s2t.json')
 M.t2jp = Opencc('t2jp.json')
-M.jp2t = Opencc('jp2t.json')
+--M.jp2t = Opencc('jp2t.json') 無此
 
 ---@param translation Translation
 function M.yieldAllTrans(translation)

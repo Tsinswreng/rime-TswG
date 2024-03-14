@@ -2,8 +2,9 @@
 自用rime-lua腳本及方案分享
 
 
-安裝:
-librime-lua 版本 >= 200
+安裝所有腳本:
+
+要求: librime-lua 版本 >= 200
 
 * windows 小狼毫:
 
@@ -33,6 +34,13 @@ npm i clipboardy #可選。如無此則cmd.lua中涉及到剪貼板處理的功�
 
 測試無問題後再參照樣例方案按需引入你自己的方案裏。參照每個lua模塊的開頭的說明
 
+* Android 同文:
+
+仿照windows 小狼毫的安裝流程、或先在電腦上跑通後再遷移到同文上
+
+* linux macos:
+
+沒試過 自己摸索罷()
 
 歡迎提出問題或想法
 
@@ -40,7 +48,7 @@ lua腳本模塊:
 * init.lua 用于初始化配置
 * predict.lua 動態聯想詞
 * userWordCombiner.lua 輸入歷史組詞記入詞庫
-* cmd.lua 命令、當前支持開關轉換, 輸出unicode字符, 輸出lua表達式(可當計算器用), 讀取剪貼板處理內容後輸出(反轉,豎排等)
+* cmd.lua 命令、當前支持開關轉換, 輸出unicode字符, 輸出lua表達式(可當計算器用), 讀取剪貼板處理內容後輸出(簡繁轉換,字串反轉,豎排等)
 * jp.lua 繁轉日
 * getSingleCharFromPhrase.lua 以詞定字
 * hintTrad.lua 簡體模式下提示傳統漢字
@@ -165,12 +173,15 @@ lua腳本模塊:
 * 以十六進制上屏unicode字符
 
 `$u,4e2d` -> `中`
+
 ![alt text](img/Code_D17D2saPzf.gif)
 
 * 上屏lua表達式(可當簡易計算器用)
+
 `$l,2-3` -> `-1`
 
 `$l,math.log(5)` -> `1.6094379124341`
+
 ![alt text](img/notepad++_EXKDdRCEYF.gif)
 
 
@@ -200,10 +211,13 @@ npm i clipboardy
 `t`:繁體; `s`: 簡體; `jp`: 日語新字體; `2`: to
 
 如`$v,t2s` 對剪貼板內容繁轉簡後上屏
+
 ![alt text](img/notepad++_eEWZpxnLkj.gif)
 
 * 剪貼板字串逆序上屏
+
 `$r`
+
 ![alt text](img/notepad++_lyeDupTIc5.gif)
 
 * 豎排右換行分段輸出
@@ -217,6 +231,7 @@ npm i clipboardy
 不分段示例:
 
 `$fv,7`:
+
 ![alt text](img/image-1.png)
 
 分段示例:
@@ -226,6 +241,7 @@ npm i clipboardy
 天生萬物以養民，民無一善可報天。不知蝗蠹遍天下，苦盡蒼生盡王臣。人之生矣有貴賤，貴人長為天恩眷。人生富貴總由天，草民之窮由天譴。忽有狂徒夜磨刀，帝星飄搖熒惑高。翻天覆地從今始，殺人何須惜手勞。不忠之人曰可殺！不孝之人曰可殺！不仁之人曰可殺！不義之人曰可殺！不禮不智不信人，大西王曰殺殺殺！我生不為逐鹿來，都門懶築黃金台，狀元百官都如狗，總是刀下觳觫材。傳令麾下四王子，破城不須封刀匕。山頭代天樹此碑，逆天之人立死跪亦死！ab12!@
 ```
 `$fv,8,9`
+
 ![alt text](img/image-3.png)
 
 ## lua工具

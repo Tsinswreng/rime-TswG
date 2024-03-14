@@ -4,7 +4,7 @@ local default = {} ---@class LuaConfig
 
 default.predict = {
 	charToPush = '^' -- 須在speller中 
-	,switchName = 'predict'
+	,switchName = 'predict' --須添加在switches中
 }
 
 default.userWordCombiner = {
@@ -35,9 +35,10 @@ default.qualityHint = {
 }
 
 default.charInPhrase = {
-	
+
 }
 
+--使某個方案配置異於全局配置 中括號內填方案ID
 M['dks'] = { ---@type LuaConfig
 	predict = {
 		charToPush = '^'

@@ -1,7 +1,7 @@
 --[[ 
 
 TsinswrengGwāng<2290019838@qq.com>
-
+配置在config.lua中。最好先閱讀config.lua 中 的default.predict中的說明
 在<User_Data>/rime.lua中加入:
 ```lua
 local predict = require("predict")
@@ -673,13 +673,8 @@ return M
 
 --[[ 
 TODO
-- [ ] 動態聯想,
 - [ ] 原單擊n鍵、出候選「你,那,能,而,二,如...」
 設當余輸入「不知其」後、出聯想:「~二」,「~所」。
 而後再擊n鍵、則所出候選中使「~二」至最前。
-
-- [ ] 究 my_component.lua中以詞充候選之法
-
-- [ ] 單詞逐字上屏亦可作詞ⁿ更新用戶詞典
 
  ]]
