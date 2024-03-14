@@ -126,9 +126,13 @@ lua腳本模塊:
 
 越靠前的字串、若有查找結果則所得候選詞權重越高
 
+(下圖是gif)
+
 ![alt text](img/notepad++_iOf77TMG27.gif)
 
 註釋可關
+
+(下圖是gif)
 
 ![alt text](img/notepad++_Hk2mdipCgV.gif)
 
@@ -151,6 +155,8 @@ lua腳本模塊:
 開: `$s`
 
 關: `$S`
+
+(下圖是gif)
 
 ![alt text](img/notepad++_HQxexpgFW4.gif)
 
@@ -179,6 +185,8 @@ lua腳本模塊:
 
 `$u,4e2d` -> `中`
 
+(下圖是gif)
+
 ![alt text](img/Code_D17D2saPzf.gif)
 
 * 上屏lua表達式(可當簡易計算器用)
@@ -186,6 +194,8 @@ lua腳本模塊:
 `$l,2-3` -> `-1`
 
 `$l,math.log(5)` -> `1.6094379124341`
+
+(下圖是gif)
 
 ![alt text](img/notepad++_EXKDdRCEYF.gif)
 
@@ -217,11 +227,15 @@ npm i clipboardy
 
 如`$v,t2s` 對剪貼板內容繁轉簡後上屏
 
+(下圖是gif)
+
 ![alt text](img/notepad++_eEWZpxnLkj.gif)
 
 * 剪貼板字串逆序上屏
 
 `$r`
+
+(下圖是gif)
 
 ![alt text](img/notepad++_lyeDupTIc5.gif)
 
