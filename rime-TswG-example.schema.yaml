@@ -1,11 +1,14 @@
 #2024-03-03T08:18:10.000+08:00
 # Rime schema
 # encoding: utf-8
+# Copyright (c) 2024 TsinswrengGwāng<tsinswreng@gmail.com>
+# This code is licensed under MIT License.
+# https://github.com/Tsinswreng/rime-TswG
 schema:
   schema_id: rime-TswG-example
   name: rime-TswG-example
   version: ""
-  author: Tsinswreng Gwāng<2290019838@qq.com>
+  author: TsinswrengGwāng<tsinswreng@gmail.com>
   #description: |-
 
   dependencies:

@@ -1,4 +1,10 @@
-local M = {} ---@type Module
+--[[ 
+Copyright (c) 2024 TsinswrengGwāng <tsinswreng@gmail.com>
+This code is licensed under MIT License.
+https://github.com/Tsinswreng/rime-TswG
+ ]]
+
+local M = {}
 M.filter = {}
 local candLimit = 64
 

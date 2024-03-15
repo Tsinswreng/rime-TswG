@@ -1,3 +1,8 @@
+--[[ 
+Copyright (c) 2024 TsinswrengGwāng <tsinswreng@gmail.com>
+This code is licensed under MIT License.
+https://github.com/Tsinswreng/rime-TswG
+ ]]
 local ut = require('ut')
 local config_ = require('config')
 local HistoryDeque = require("HistoryDeque")

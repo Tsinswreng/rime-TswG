@@ -5,6 +5,7 @@ local default = {} ---@class LuaConfig
 default.predict = {
 	charToPush = '^' -- 須在speller中 
 	,switchName = 'predict' --須添加在switches中
+	,noComment = true -- 爲true旹 聯想候選無註釋
 }
 
 default.userWordCombiner = {

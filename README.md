@@ -175,6 +175,7 @@ lua腳本模塊:
 ![alt text](img/image-6.png)
 
 `乘`->`乗`
+
 `歸`->`帰`
 
 ### cmd.lua

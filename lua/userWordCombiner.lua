@@ -1,3 +1,8 @@
+--[[ 
+Copyright (c) 2024 TsinswrengGwāng<tsinswreng@gmail.com>
+This code is licensed under MIT License.
+https://github.com/Tsinswreng/rime-TswG
+ ]]
 local config = require('config').default
 local shared = require('shared')
 local predictCharToPush = config.predict.charToPush or ''
@@ -118,6 +123,7 @@ local function addEntriesInUser(mem, dictEntries)
 		if sub(de.custom_code, 1, 1)==' ' or sub(de.custom_code, len(de.custom_code)-1, len(de.custom_code)) == '  ' then
 			goto continue
 		end
+		de.comment = 'userWordCombiner'
 		mem:update_userdict(de, 1, '')
 		--Wat(de.text)
 		::continue::

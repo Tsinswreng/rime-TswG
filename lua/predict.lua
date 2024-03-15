@@ -1,6 +1,8 @@
 --[[ 
+Copyright (c) 2024 TsinswrengGwāng <tsinswreng@gmail.com>
+This code is licensed under MIT License.
+https://github.com/Tsinswreng/rime-TswG
 
-TsinswrengGwāng<2290019838@qq.com>
 配置在config.lua中。最好先閱讀config.lua 中 的default.predict中的說明
 在<User_Data>/rime.lua中加入:
 ```lua
@@ -541,6 +543,9 @@ local function geneStaticPredictCands(env, seg, c_cb_cba)
 			
 			local quality = math.log(1000^(i+1) + quality_ori)
 			local comment = i..'-'..j..'-'..inputStr..'-'..quality..'-'..qualityStr_ori
+			if config.predict.noComment then
+				comment = ''
+			end
 			local cand = Candidate(
 				predictCandTag
 				, seg.start
@@ -590,8 +595,12 @@ local function geneUserPredictCands(env, seg, c_cb_cba)
 			--local cand = ph:toCandidate()
 			local cand = Candidate('dyMem', seg.start, seg._end, de.text, '')
 			cand.quality = math.log((100*de.commit_count)^(#inputStr) / #de.text) + de.weight
+			if config.predict.noComment then
+				
+			else
+				cand.comment = 'dy'..inputStr..'-'..cand.quality
+			end
 			
-			cand.comment = 'dy'..inputStr..'-'..cand.quality
 			table.insert(des, de)
 			table.insert(phrases, ph)
 			table.insert(cands, cand)
