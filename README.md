@@ -65,7 +65,8 @@ lua腳本模塊:
 * filterOnAddtionalCode.lua 針對使用輔助碼旹的filter(僅用于dks方案)
 * limitFilter.lua 置于filters最前面㕥限制filter中候選詞的數量、㕥防後續filter處理過多不需要的候選
 * time_translator.lua 輸出當前時間
-* clearOnKey.lua 按住shift+退格 清空輸入(原爲清除一個分段)
+<!-- * clearOnKey.lua 按住shift+退格 清空輸入(原爲清除一個分段) -->
+* clearOnKey.lua 按下shift又直接松開旹 清空菜單
 
 
 工具等:

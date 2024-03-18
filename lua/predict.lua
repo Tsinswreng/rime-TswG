@@ -4,6 +4,9 @@ This code is licensed under MIT License.
 https://github.com/Tsinswreng/rime-TswG
 
 配置在config.lua中。最好先閱讀config.lua 中 的default.predict中的說明
+
+確保用戶文件夾根目錄下需要有 build_/prd.reverse.bin 這一文件。此文件用于提供靜態聯想詞。
+
 在<User_Data>/rime.lua中加入:
 ```lua
 local predict = require("predict")
@@ -50,15 +53,16 @@ local ignoreSingleChar = config.userWordCombiner.ignoreSingleChar
 ---@param env Env
 local function init(env)
 	config = shared.loadConfig(env.engine.schema.schema_id)
-	charToPush = config.predict.charToPush
-	optName = config.predict.switchName ---$此模塊的開關ˋ在schema中之名
-	predictCandTag = 'predict' ---$
-	reverseName = 'prd' ---$
-	reverseDbPath = 'build_/'..reverseName..'.reverse.bin'
+	local conf = config.predict
+	charToPush = conf.charToPush
+	optName = conf.switchName ---$此模塊的開關ˋ在schema中之名
+	predictCandTag = conf.predictCandTag
+	reverseName = conf.reverseName
+	reverseDbPath = conf.reverseDbPath
 	reversedb= ReverseDb(reverseDbPath) ---$
-	defaultPredict = {'的','一','是','了','我'} ---$默認添加到最後的聯想詞、㕥防搜索不到候選或候選過少
-	commitHistoryDepth = 4 --- $輸入歷史ˉ雙端隊列之最大容量
-	splitterOfpredictWord__quality = '_' --- $dict.yaml中聯想詞與默認權重之分隔符
+	defaultPredict = conf.defaultPredict
+	commitHistoryDepth = conf.commitHistoryDepth
+	splitterOfpredictWord__quality = conf.splitterOfpredictWord__quality
 	dyDictEntries = {} ---@type DictEntry[]
 	text__dyDictEntries = {} ---@type table<string, DictEntry>
 	ignoreSingleChar = config.userWordCombiner.ignoreSingleChar

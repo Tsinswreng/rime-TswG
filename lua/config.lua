@@ -4,9 +4,15 @@ local default = {} ---@class LuaConfig
 
 default.predict = {
 	charToPush = '^' -- 須在speller中 
-	,switchName = 'predict' --須添加在switches中
+	,switchName = 'predict' --此模塊的開關ˋ在schema中之名 須添加在switches中
 	,noComment = true -- 爲true旹 聯想候選無註釋
+	,reverseName = 'prd'
+	,predictCandTag = 'prd'
+	,defaultPredict = {'的','一','是','了','我'} ---$默認添加到最後的聯想詞、㕥防搜索不到候選或候選過少
+	,commitHistoryDepth = 4 --- $輸入歷史ˉ雙端隊列之最大容量
+	,splitterOfpredictWord__quality = '_' --- $dict.yaml中聯想詞與默認權重之分隔符
 }
+default.predict.reverseDbPath = 'build_/'..default.predict.reverseName..'.reverse.bin'
 
 default.userWordCombiner = {
 	fullPunctArr = {'。','、','，','！','？','：','；','《','》','「','」','‘','’','“','”','ˋ'}
