@@ -1,6 +1,11 @@
 # rime-TswG
 自用rime-lua腳本及方案分享
 
+
+## Warning
+2024-05-06T21:39:31.266+08:00
+該項目已改用typescirpt重構、原先的lua文件夾已移至/old目錄下、且不再維護
+
 ## usage
 
 `rime-TswG-example.schema.yaml`是帶有腳本的樣例方案。使用明月拼音的碼表
