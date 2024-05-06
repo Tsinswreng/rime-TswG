@@ -1,0 +1,34 @@
+{
+	"$schema": "https://raw.githubusercontent.com/TypeScriptToLua/TypeScriptToLua/master/tsconfig-schema.json",
+	"compilerOptions": {
+		"target": "ESNext",
+		"lib": ["ESNext"],
+		//"skipLibCheck": true,
+		"moduleResolution": "Node",
+		//"types": ["./librime-lua.d.ts", "./global.d.ts"],
+		//"types": ["./types/*"],
+		"types": [
+			"@typescript-to-lua/language-extensions"
+			// , "./src/types/lib_es/es5.d.ts"
+			// ,"./src/types/lib_es/es2015.d.ts"
+		],
+		//"typeRoots": ["./types"],
+		"strictPropertyInitialization": false,
+		"strict": true
+		,"noImplicitAny": false
+		,"outDir": "../lua"
+		//,"outDir": "./out"
+		,"rootDir": "./src"
+		//,"baseUrl": "D:\\Program Files\\Rime\\User_Data\\_tsToLua\\"
+		,"baseUrl": "./src"
+		,"paths": {
+			//"@/*":["./*"]
+			"@/*":["./TswG/*"]
+		}
+	},
+	"tstl": {
+		//"luaTarget": "JIT"
+		"luaTarget": "5.4"
+	}
+	
+}
