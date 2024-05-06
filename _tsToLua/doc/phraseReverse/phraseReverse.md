@@ -21,7 +21,7 @@ dependencies: [
 rime.lua:
 
 ```lua
-local phraseReverse = require('TswG.phraseReverse')
+local phraseReverse = require('TswG.mod.phraseReverse')
 phraseReverse_F = phraseReverse.filter
 ```
 

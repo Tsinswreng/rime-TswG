@@ -1,4 +1,4 @@
-import Emt from "@/__ts_lib__/EventEmitter";
+import Emt from "@/_ts_lib/EventEmitter";
 import { describe,it,expect } from '@/UnitTest'
 export default function run(){
 
