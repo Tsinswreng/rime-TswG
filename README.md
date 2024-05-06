@@ -1,10 +1,14 @@
 # rime-TswG
 自用rime-lua腳本及方案分享
 
+## 
+需要把整個TswG目錄移動到/lua下、而不是打開TswG目錄再把裏面的內容移動到/lua下
 
 ## Warning
 2024-05-06T21:39:31.266+08:00
 該項目已改用typescirpt重構、原先的lua文件夾已移至/old目錄下、且不再維護
+
+## 舊版的README.md:
 
 ## usage
 
