@@ -340,6 +340,7 @@ class Processor extends Module.RimeProcessor{
 			const candText = mod.getSelectedCandText(ctx)
 			//mod.status.firstCharInCand = Str.utf8sub(candText, 0, 0)
 			mod.status.curCharEtInput = CharEtInput.new(candText, input)
+			return pr.kNoop
 		}
 		
 		
@@ -352,8 +353,11 @@ class Processor extends Module.RimeProcessor{
 			}
 			
 			mod.status.neoInput = Str.utf8sub(input, mod.opt.fixedLength, mod.opt.fixedLength)
-			ctx.clear()
+			
+			ctx.clear() //清除所有輸入
+			//ctx.pop_input(mod.opt.fixedLength+1) //清除指定個數的輸入
 			ctx.push_input(mod.status.neoInput)
+			return pr.kNoop
 		}
 		mod.setPrompt(ctx, mod.status.teengqPeeng.getPrompt())
 		return pr.kNoop
