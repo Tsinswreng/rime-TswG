@@ -3,8 +3,12 @@
  * This code is licensed under MIT License.
  * https://github.com/Tsinswreng/rime-TswG
  * 
-*/
+ */
+
 import * as Module from '@/module'
+import { SwitchMaker, cmdMod as cmdMod } from './cmd/ts_cmd'
+
+
 
 class Opt{
 	static new(){
@@ -29,6 +33,11 @@ class Mod extends Module.ModuleStuff{
 	get opt(){return this._opt}
 
 	protected _env: Env;
+
+	override _init(env: Env): void {
+		super._init(env)
+		CommentQualitySwitch.new().register(cmdMod)
+	}
 	
 	isOn(ctx:Context){
 		const z = this
@@ -36,6 +45,12 @@ class Mod extends Module.ModuleStuff{
 	}
 }
 export const mod = Mod.new()
+
+class CommentQualitySwitch extends SwitchMaker{
+	_cmd_off__on: [string, string] = ['Q', 'q']
+	_switchNames_on: string[] = [mod.opt.switchName]
+}
+
 
 class Filter extends Module.RimeFilter{
 	static new(){

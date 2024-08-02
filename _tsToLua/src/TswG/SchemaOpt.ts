@@ -3,10 +3,11 @@
  * This code is licensed under MIT License.
  * https://github.com/Tsinswreng/rime-TswG
  * 
-*/
+ */
 
 import * as Str from '@/strUt'
 import { nn } from './ts_Ut'
+import { ParseType } from './ts_Type'
 /**
  * @deprecated
  * @param conf 
@@ -101,7 +102,6 @@ function parseItemDeep(this:void, item:ConfigItem, parseValueFn:(configValue:Con
 		}
 		return ans
 	}
-
 }
 
 
@@ -251,7 +251,7 @@ function deepAssignOnlyExistingKeys<Tar=any>(this:void, target:Tar, configItem:C
 function parseSingleTypeScalarList(list:ConfigList, type:'string'):string[]
 function parseSingleTypeScalarList(list:ConfigList, type:'number'):number[]
 function parseSingleTypeScalarList(list:ConfigList, type:'boolean'):boolean[]
-
+function parseSingleTypeScalarList(list:ConfigList, type:'string'|'number'|'boolean'):ParseType<typeof type>[]
 function parseSingleTypeScalarList(list:ConfigList, type:'string'|'number'|'boolean'){
 	const ans = [] as any[]
 	function handleStr(uv:ConfigValue){
@@ -372,11 +372,11 @@ export class SchemaOpt{
 	
 	static readonly switchNames = new SwitchNames()
 	
-	/** @deprecated */
-	static readonly parsePathRecursive = parseRecursive
+	///** @deprecated */
+	//static readonly parsePathRecursive = parseRecursive
 
-	/** @deprecated */
-	static readonly parseItemRecursive = parseItemDeep
+	///** @deprecated */
+	//static readonly parseItemRecursive = parseItemDeep
 	
 	static deep = DeepFn
 	static ut = Ut

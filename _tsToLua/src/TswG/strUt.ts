@@ -6,6 +6,9 @@
 */
 
 
+
+
+
 /**
  * //TODO test
  * @param str 
@@ -18,6 +21,9 @@ export function utf8At(str:string, index:integer){
 
 export function utf8Len(this:void, str:string){
 	const ans = utf8.len(str)
+	if(ans == void 0){
+		throw new Error(`${str}\nstr not valid`)
+	}
 	return ans
 }
 
@@ -35,6 +41,9 @@ export function utf8Len(this:void, str:string){
 export function lua_utf8sub(this:void, s:string, i:integer=1, j:integer=-1){
 	if(i < 1 || j < 1){
 		const n = utf8Len(s)
+		if(n == void 0){
+			throw new Error(`${s}\nstr not valid`)
+		}
 		if( i < 0 ){
 			i = n + 1 + i
 		}
@@ -87,7 +96,7 @@ export function utf8sub(this:void, str:string, i:integer, j:integer){
  */
 function strToUtf8CharArr(str:string){
 	const ans = [] as string[]
-	for(let i = 0; i < utf8.len(str); i++){
+	for(let i = 0; i < utf8Len(str); i++){
 		ans[i] = lua_utf8sub(str, i+1, i+1)
 		//ans[i] = utf8.char(utf8.codepoint(str, i+1))
 	}
@@ -123,18 +132,18 @@ export function split(this:void, str: string, delimiter: string): string[] {
 		return strToUtf8CharArr(str)
 	}
 
-    const result: string[] = [];
-    let startIndex = 0;
-    let delimiterIndex = str.indexOf(delimiter);
+	const result: string[] = [];
+	let startIndex = 0;
+	let delimiterIndex = str.indexOf(delimiter);
 
-    while (delimiterIndex !== -1) {
-        result.push(str.substring(startIndex, delimiterIndex));
-        startIndex = delimiterIndex + delimiter.length;
-        delimiterIndex = str.indexOf(delimiter, startIndex);
-    }
+	while (delimiterIndex !== -1) {
+		result.push(str.substring(startIndex, delimiterIndex));
+		startIndex = delimiterIndex + delimiter.length;
+		delimiterIndex = str.indexOf(delimiter, startIndex);
+	}
 
-    result.push(str.substring(startIndex));
-    return result;
+	result.push(str.substring(startIndex));
+	return result;
 }
 
 
@@ -173,6 +182,12 @@ export function removePrefixSafe(str:string, prefix:string){
 	}
 	return removePrefixUnsafe(str, prefix)
 }
+
+
+
+
+
+
 
 /**
  * //TODO test

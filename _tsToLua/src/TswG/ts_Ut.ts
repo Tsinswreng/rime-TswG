@@ -6,7 +6,11 @@
 */
 
 import * as Ty from '@/ts_Type'
-import { libTswG } from './_lib/libTswG/libTswG'
+import { getMilliseconds } from './_lib'
+
+// export function errToStr(err){
+
+// }
 
 //TODO test
 export function readFile(fileName:string){
@@ -21,11 +25,14 @@ export function readFile(fileName:string){
 	return ans
 }
 
-export function getMilliseconds():integer|undefined{
-	if(libTswG){
-		return libTswG()?.getMilliseconds()
-	}
-}
+// export function getMilliseconds():integer|undefined{
+// 	if(libTswG){
+// 		return libTswG()?.getMilliseconds()
+// 	}
+// }
+
+/** @deprecated */
+export {getMilliseconds}
 
 /**
  * non null

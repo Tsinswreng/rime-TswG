@@ -14,7 +14,7 @@ export class History<T> extends CyclicArray<T>{
 	}
 	
 	static new<T>(...prop:Parameters<typeof CyclicArray.new>):History<T>
-	static new<T>(...prop:any[]):never
+	//static new<T>(...prop:any[]):never
 
 	static new<T>(...prop:Parameters<typeof CyclicArray.new>):History<T>{
 		// const p = CyclicArray.new(...prop)

@@ -55,7 +55,8 @@ declare namespace Lua{
 	}
 	interface Utf8_static{
 		offset	(this:void, str:string, n:integer, i?:integer):integer
-		len	(this:void, s:string, i?:integer, j?:integer, lax?:boolean): integer
+		/** 包含無效ʹ字符旹 返nil */
+		len	(this:void, s:string, i?:integer, j?:integer, lax?:boolean): integer|undefined
 		char	(this:void, code:integer, ...ints:integer[]):string
 		/**
 		 * Returns the codepoints (as integers) from all characters in s that start
@@ -68,18 +69,20 @@ declare namespace Lua{
 		 * @param j 
 		 * @param lax 
 		 */
-		codepoint	(this:void, str:string, i:integer, j?:integer, lax?:boolean):integer
+		codepoint	(this:void, str:string, i?:integer, j?:integer, lax?:boolean):integer
 	}
 
 	var len:LuaLength<any,integer> // non exist actually
 	interface Debug{
 		//traceback(thread: thread, message?: any, level?: integer):string
-		traceback(message?: any, level?: integer):string
+		traceback(this:void, message?: any, level?: integer):string
+		getinfo(this:void, ...args:any[])
 	}
 
 	interface Os{
 		time(this:void):integer
 		date(this:void, format?:string)
+		getenv(this:void, varname:string):string
 	}
 
 	interface Package{
@@ -90,8 +93,16 @@ declare namespace Lua{
 	}
 
 	interface File{
-		close()
-		read()
+		close(this)
+		/**
+		 * 
+		 * @param this 
+		 * @param format 
+		 * *line 讀一行蕪換行符
+		 * *all 读取整个文件内容，返回文件中所有剩余的字符。
+		 * n 读取指定数量的字符，n 是一个正整数。
+		 */
+		read(this, format:str)
 		write(this, content:string)
 		lines(this, format?:string):LuaIterable<string>
 	}
@@ -113,7 +124,7 @@ declare function assert(this:void)
 declare function require(this:void, path:string):any
 declare function type(this:void, v:any):Lua.luaType
 declare function print(this:void, v:any):any
-declare function error(this:void)
+declare function error(this:void, message:any, level?:integer)
 declare function pairs(this:void)
 declare function ipairs(this:void)
 declare function tonumber(this:void, e:string|number, base?:integer):number|nil
@@ -123,8 +134,8 @@ declare function dofile(this:void)
 declare function loadfile(this:void)
 declare function setmetatable<T>(this:void, table:T, metatable:Lua.table):T
 declare function getmetatable(this:void, table):LuaTable|undefined
-declare function rawget(this:void)
-declare function rawset(this:void)
+declare function rawget<T>(this:void, key:string):any
+declare function rawset(this:void, key:string, value:any):any
 declare function select(this:void)
 declare function pairs(this:void, v)
 declare function ipairs(this:void, v)

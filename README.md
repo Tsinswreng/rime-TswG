@@ -21,8 +21,10 @@ _tsToLua/	# TypeScriptToLua根目錄
 
 ### 目標目錄 lua/ :
 
+```
 lualib_bundle.lua	# tstl運行依賴。
 TswG/	# 產出的.lua文件。每個.ts對應一個.lua。目錄結構與ts源碼相同。
+```
 
 ## 運行環境需求
 

@@ -13,7 +13,7 @@ class Opt{
 		const o = new this()
 		return o
 	}
-	limit=64
+	limit=128
 	min = 0
 	candidateToFill = Candidate('',0,0,' ','')
 }

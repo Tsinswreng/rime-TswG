@@ -3,7 +3,29 @@
  * This code is licensed under MIT License.
  * https://github.com/Tsinswreng/rime-TswG
  * 
+ */
+
+/* 
+需要prd作僞方案
 */
+
+//竹外桃花三兩枝春江水暖鴨先知
+
+//FIXME:
+
+/* 
+褈置動態聯想詞庫後不復現
+custom_code	text 
+麗三 	麗三	c=3 d=0 t=270786
+麗三千	麗三千	c=3 d=1.00003 t=72377
+麗三千 	麗三千	c=3 d=0 t=270786
+麗三千人	麗三千人	c=4 d=1.00003 t=72381
+麗三千人 	麗三千人	c=4 d=0 t=270786
+
+胡 custom_code 有兩況: 末有空格 與 末無空格者?
+
+*/
+
 
 import * as Module from '@/module'
 import { History } from '@/History'
@@ -11,6 +33,16 @@ import * as algo from '@/ts_algo'
 import { SchemaOpt } from '@/SchemaOpt'
 import { nn, nna } from '@/ts_Ut'
 import * as Str from '@/strUt'
+import { LevelDbPool } from '@/LevelDbPool'
+import { Cnt__Time_Ldb } from '@/KVDb'
+const ldbPool = LevelDbPool.getInst()
+
+// class Count__Time{
+// 	count=0
+// 	time=os.time()
+// }
+
+
 
 class PathNames{
 	static new(){
@@ -41,7 +73,8 @@ class ModOpt{
 	passiveSwitchName = 'passive_predict'
 	showComment = true //-- 爲true旹 聯想候選無註釋
 	showQuality = true // 在comment中 示權重
-	reverseName = 'prd'
+	//reverseName = 'TswG-predict' //dyMem 之名
+	reverseDbName = 'prd' //靜態聯想詞ʹ名 及 動態聯想詞ʹ僞方案ʹ名
 	predictCandTag_static = 'staticPredict'
 	predictCandTag_dynamic = 'dynamicPredict'
 	commentMark = {
@@ -49,13 +82,26 @@ class ModOpt{
 		,dynamic: ''
 		//,default: ''
 	}
-	
+	//竹外桃花三兩枝春江水暖鴨先知
 	defaultPredict = ['的','了','嗎','是','不'] //---$默認添加到最後的聯想詞、㕥防搜索不到候選或候選過少
 	commitHistoryDepth = 4 //--- $輸入歷史ˉ雙端隊列之最大容量
 	splitterOfpredictWord__quality = '_' //--- $dict.yaml中聯想詞與默認權重之分隔符
-	reverseDbPath = 'build_/'+this.reverseName+'.reverse.bin'
-}
+	reverseDbPath = 'build_/'+this.reverseDbName+'.reverse.bin' //靜態聯想詞
+	//metaDelimiter = '\u{7f}' //custom_code 中 錄末次ʹ改ʹ時間  刪除字符
 
+	/** 另數據庫、錄每次ʹ錄入次數 及 末次改ʹ時間 */
+	userPredictRecordDbName = 'userPredictRecord.ldb'
+	userPredictRecordDbPath = rime_api.get_user_data_dir()+'/'+this.userPredictRecordDbName
+	clearOnSpace=false
+	/** 2024-07-07T21:51:24.924+08:00 */
+	exludedPatterns= [
+		``
+	]
+	excludedChars = ` !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\`abcdefghijklmnopqrstuvwxyz{|}~`
+	noAscii=true
+}
+// 竹外桃花三兩枝春江水暖鴨先知
+// 竹外桃花三兩枝春江水暖鴨先知// 留連戲蝶時時舞自在嬌鶯恰恰啼
 // let m = {o:{b:'b'}}
 // let neoO = {c:'c'}
 // let b = m.o
@@ -79,18 +125,31 @@ class Mod extends Module.ModuleStuff{
 	protected _mortalHistory:History<string>
 	get mortalHistory(){return this._mortalHistory}
 
-	/** never be cleared, only used to record */
+	/** never be cleared, only used to record 用于0鍵刪詞 */
 	protected _immortalHistory:History<string>
 	get immortalHistory(){return this._immortalHistory}
 
 	protected _reverseDb:ReverseDb
 	get reverseDb(){return this._reverseDb}
 
+	/** text與custom_code須同 */
 	protected _dyMem:Memory
 	get dyMem(){return this._dyMem}
 
+	protected _userPredictCntTimeDb:LevelDb
+	get userPredictCntTimeDb(){return this._userPredictCntTimeDb}
+
+	protected _userCntTimeSvc:Cnt__Time_Ldb
+	get userCntTimeSvc(){return this._userCntTimeSvc}
+
 	protected _schemaOpt:SchemaOpt
 	get schemaOpt(){return this._schemaOpt}
+
+	/** 不知道int用來存甚麼、但是就是不想用set */
+	protected _excludedChars = new Map<str, int>()
+	get excludedChars(){return this._excludedChars}
+	protected set excludedChars(v){this._excludedChars = v}
+	
 
 
 	//一 一去 二三 里 -> [["里"],["二三","里"],["一去","二三","里"],["一","一去","二三","里"]]
@@ -114,6 +173,8 @@ class Mod extends Module.ModuleStuff{
 	get allPredictCands(){return this._allPredictCands}
 	set allPredictCands(v){this._allPredictCands = v}
 
+
+
 	// protected _static_text__Cands = new Map<string, Candidate>()
 
 	// protected _dynamic_text_Cands = new Map<string, Candidate>()
@@ -133,11 +194,22 @@ class Mod extends Module.ModuleStuff{
 		z._schemaOpt = SchemaOpt.new(env)
 		z.initNotifier(env.engine.context)
 		z.init_dyMem(env.engine)
+		z._initUserCntTimeDb()
+		PredictSwitch.new().register(cmdMod)
+		ActivePredictSwitch.new().register(cmdMod)
+		PassivePredictSwitch.new().register(cmdMod)
+		z._init_excludedChars()
+	}
+
+	protected _init_excludedChars(){
+		const z = this
+		const sp = Str.split(z.opt.excludedChars, '')
+		sp.map(e=>z.excludedChars.set(e, e.charCodeAt(0)))
 	}
 
 	init_dyMem(engine:Engine){
 		const z = this
-		const schema = Schema(z.opt.reverseName)
+		const schema = Schema(z.opt.reverseDbName)
 		z._dyMem = Memory(engine, schema)
 	}
 
@@ -166,6 +238,14 @@ class Mod extends Module.ModuleStuff{
 		return z.opt
 	}
 
+	_initUserCntTimeDb(){
+		const z = this
+		const db = ldbPool.connectByName(z.opt.userPredictRecordDbName, z.opt.userPredictRecordDbPath)
+		z._userPredictCntTimeDb = db
+		z._userCntTimeSvc = Cnt__Time_Ldb.new(db)
+	}
+
+
 	readonly This = Mod
 	//static readonly _name = 'ts_predict'
 	protected readonly _name = 'ts_predict'
@@ -186,6 +266,14 @@ class Mod extends Module.ModuleStuff{
 	// 	const z = this
 	// 	return ctx.get_option(z._opt.switchName)
 	// }
+
+	/**
+	 * clear mortalHistory
+	 */
+	clearHistory(){
+		const z = this
+		z.mortalHistory.clear()
+	}
 
 	addText__cand(text__cand:Map<string, Candidate>, cands:Candidate[]){
 		for(const cand of cands){
@@ -227,16 +315,24 @@ class Mod extends Module.ModuleStuff{
 	}
 
 	/**
-	 * 
 	 * @param dyMem 聯想詞userdict
 	 * @param str 
 	 */
-	updateDyMemByStr(this:void, dyMem:Memory, str:string){
+	protected _updateDyMemByStr(this:void, dyMem:Memory, str:string){
 		const de = DictEntry()
 		de.text = str
 		de.custom_code = str
 		return dyMem.update_userdict(de, 1, '')
 	}
+
+
+	updateDyDbByStr(str:str){
+		const z = this
+		z._updateDyMemByStr(z.dyMem, str)
+		z.userCntTimeSvc.update(str)
+		return true
+	}
+
 
 	dyMemDelete(this:void, dyMem:Memory, str:string){
 		dyMem.user_lookup(str, true) //-- 傳入false則尋不見、傳入true則多尋
@@ -330,9 +426,6 @@ class Mod extends Module.ModuleStuff{
 					continue
 				}
 				de.text = sub
-
-				
-
 				const cand = Candidate('dyMem', segStart, segEnd, de.text, '')
 				cand.quality = Math.log(
 					(100*de.commit_count) ** ((inputStr).length)
@@ -378,6 +471,10 @@ class Mod extends Module.ModuleStuff{
 			z.immortalHistory.addBackF(commit)
 			//TODO 未完
 
+			if( algo.strContainsAnyInSet(commit, z.excludedChars) ){
+				z.clearHistory()
+			}
+
 			//更新c_bc_abc 並錄入用戶動態詞庫
 			const hisToArr = mod.mortalHistory.toArray()
 			const c_bc_abc2d = algo.abc_to_c_bc_abc(hisToArr)
@@ -389,7 +486,9 @@ class Mod extends Module.ModuleStuff{
 				if(Str.utf8Len(u)===1){
 
 				}else{
-					z.updateDyMemByStr(z.dyMem, u)
+					//z.updateDyMemByStr_deprecated(z.dyMem, u)
+					//z.updateDyDbByStr(u+' ') 此則聯想不效
+					z.updateDyDbByStr(u)
 				}
 			}
 			// if( z.isTimeToClearHistory() ){
@@ -397,9 +496,7 @@ class Mod extends Module.ModuleStuff{
 			// }
 			
 
-			if( !z.isOn_active(ctx) && !z.isOn_passive(ctx)){
-
-			}else{
+			if( z.isOn_active(ctx) || z.isOn_passive(ctx)){
 				z.geneDynamicPredictCands(0,0)
 				z.geneStaticPredictCands(Segment(0,0))
 				z._allPredictCands = []
@@ -407,6 +504,7 @@ class Mod extends Module.ModuleStuff{
 				z._allPredictCands = algo.distinct(z._allPredictCands, (e)=>e.text)
 				z._all_text__Cand = new Map()
 				z.addText__cand(z._all_text__Cand, z._allPredictCands)
+			}else{
 			}
 		}
 	}
@@ -460,10 +558,60 @@ class Mod extends Module.ModuleStuff{
 		return neo1d
 	}
 
+
+
+	fixGotQuality(q:number){
+		let ans = Math.log(q)/1
+		if(ans < 0){
+			ans = 0
+		}
+		return ans
+	}
+
+	/**
+	 * test
+	 */
+	printRecordDb(){
+		const z = this
+		const dba = z.userPredictCntTimeDb.query('')
+		const sb = [] as str[]
+		for(const [k,v] of dba.iter()){
+			const ua = (k+'\t'+v)
+			sb.push(ua)
+		}
+		log.info('<print>')
+		log.info(sb.join('\n'))
+		log.info('</print>')
+	}
+
 }
 
 
 export const mod = Mod.new()
+
+
+import { SwitchMaker, cmdMod } from './cmd/ts_cmd'
+
+const predictMod = mod
+class PredictSwitch extends SwitchMaker{
+	_cmd_off__on: [string, string] = ['P', 'p']
+	_switchNames_on = [predictMod.opt.activeSwitchName, predictMod.opt.passiveSwitchName]
+	//_switchNames_off = [predictMod.opt.activeSwitchName, predictMod.opt.passiveSwitchName]
+}
+
+
+class ActivePredictSwitch extends SwitchMaker{
+	_cmd_off__on: [string, string] = ['Ap', 'ap']
+	_switchNames_on = [predictMod.opt.activeSwitchName]
+	//_switchNames_off = [predictMod.opt.activeSwitchName, predictMod.opt.passiveSwitchName]
+}
+
+class PassivePredictSwitch extends SwitchMaker{
+	_cmd_off__on: [string, string] = ['Pp', 'pp']
+	_switchNames_on = [predictMod.opt.passiveSwitchName]
+	//_switchNames_off = [predictMod.opt.activeSwitchName, predictMod.opt.passiveSwitchName]
+}
+
 
 
 class Processor extends Module.RimeProcessor{
@@ -483,10 +631,45 @@ class Processor extends Module.RimeProcessor{
 		const repr = key.repr()
 		const keyCode = key.keycode
 		const pr = Module.ProcessResult
-		
-		// if(!mod.isOn(ctx)){
-		// 	return pr.kNoop
+
+		// if(repr === 'grave'){
+		// 	mod.printRecordDb()
 		// }
+		// if(repr === 'grave'){
+		// 	const dba = mod.userPredictCntTimeDb.query('')
+		// 	Wat(dba)
+		// 	for(const [k,v] of dba.iter()){
+		// 		log.error(k+v)
+		// 		Wat(Str.split(v, '\t'))
+		// 	}
+		// }
+		 
+		// if(!mod.isOn(ctx)){
+		// 	return pr.kNoop  
+		// }
+
+ 
+		// if(repr === 'grave'){ //test
+		// 	const mem = Memory(env.engine, env.engine.schema)
+		// 	const habeo = mem.user_lookup('ja', true)
+		// 	Wat(habeo)
+		// 	for(const de of mem.iter_user()){
+		// 		Wat([de.text, de.custom_code])
+		// 		log.error('.')
+		// 		Wat(mem.decode(de.code))
+		// 	} 
+		// 	// const habeo = mem.dict_lookup('', true, 64)
+		// 	// Wat(habeo)
+		// 	// for(const de of mem.iter_dict()){
+		// 	// 	log.error(de.text)
+		// 	// 	Wat(mem.decode(de.code))
+		// 	// }
+		// }
+		
+/* 		mod.dyMem.user_lookup('', true)
+		for(const de of mod.dyMem.iter_user()){
+			Wat([de.text, de.custom_code])
+		} */
 
 		if(!mod.isOn_active(ctx)){
 			return pr.kNoop
@@ -509,8 +692,11 @@ class Processor extends Module.RimeProcessor{
 			//若當前ʃ按ᵗ鍵ˋ 在alphabet中
 			if( gotKey != void 0 ){
 
-			}else if( keyCode === 32 ){ //space 32 //repr === 'space'
-				
+			}else if( repr === 'space' ){ //space 32 //repr === 'space'
+				if(mod.opt.clearOnSpace){
+					ctx.clear()
+					return pr.kAccepted
+				}
 			}else if( 49 <= keyCode && keyCode <= 57 ){ //除0外 橫排數字
 				return pr.kNoop
 			}else if( repr === 'BackSpace' ){ //清ᵣ輸入史
@@ -587,7 +773,6 @@ class Translator extends Module.RimeTranslator{
 	}
 
 	override func(this: void, input: string, segment: Segment, env: Env): void {
-		let testCand = Candidate('type', segment.start, segment._end, '大佬超市我♡', '我是註釋')
 		if( !mod.timeTo.predict ){
 			return
 		}
@@ -631,7 +816,10 @@ class Translator extends Module.RimeTranslator{
 			yield_(cand)
 		}
 	}
+
 }
+
+
 
 class Filter extends Module.RimeFilter{
 
@@ -647,12 +835,21 @@ class Filter extends Module.RimeFilter{
 			cands.push(cand)
 		}
 
+		/** 會受limitFilter影響。 */
 		if( mod.isOn_passive(ctx) && ctx.input.length <= 1 ){ //TODO
 			for(let i = 0; i < cands.length; i++){
+				if(i === 0){
+					cands[i].quality +=1 //使首個候選ʹ權重ˋ更大、方便打首字母出常用字
+				}
 				const cand = cands[i]
 				const got = mod.all_text__Cand.get(cand.text)
 				if(got == void 0){continue}
-				cand.quality += got.quality/2
+				// cand.quality += got.quality/2
+				//Wat(cand.text+' '+cand.quality+' '+got.quality)//t
+				//cand.quality += Math.log(got.quality)/10
+				let fixQuality = mod.fixGotQuality(got.quality)
+				cand.quality += fixQuality
+				
 			}
 			cands.sort((b,a)=>{return a.quality - b.quality})
 		}
