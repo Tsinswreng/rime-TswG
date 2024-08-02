@@ -11,6 +11,7 @@ import * as Str from '@/strUt'
 class OptKeyNames{
 	keyOnClearStatus = 'keyOnClearStatus'
 	keyOnCommitRawInput = 'keyOnCommitRawInput'
+	keyOnCommitWithKNoop = 'keyOnCommitWithKNoop'
 }
 const optKeyNames = new OptKeyNames()
 
@@ -30,6 +31,10 @@ class Opt{
 
 	keyOnCommitRawInput = [
 		'Return'
+	]
+
+	keyOnCommitWithKNoop = [
+
 	]
 
 
@@ -158,7 +163,12 @@ class Mod extends Module.ModuleStuff{
 
 	protected _keyOnClearStatus = new Set()
 	get keyOnClearStatus(){return this._keyOnClearStatus}
-	set keyOnClearStatus(v){this._keyOnClearStatus = v}
+	protected set keyOnClearStatus(v){this._keyOnClearStatus = v}
+
+	protected _keyOnCommitWithKNoop = new Set()
+	get keyOnCommitWithKNoop(){return this._keyOnCommitWithKNoop}
+	protected set keyOnCommitWithKNoop(v){this._keyOnCommitWithKNoop = v}
+	
 
 	protected _commitConne:Connection
 	get commitConne(){return this._commitConne}
@@ -182,8 +192,10 @@ class Mod extends Module.ModuleStuff{
 		super._init_opt(env)
 		z.assignArr(optKeyNames.keyOnClearStatus)
 		z.assignArr(optKeyNames.keyOnCommitRawInput)
+		z.assignArr(optKeyNames.keyOnCommitWithKNoop)
 		z.keyOnCommitRawInput = new Set(z.opt.keyOnCommitRawInput)
 		z.keyOnClearStatus = new Set(z.opt.keyOnClearStatus)
+		z.keyOnCommitWithKNoop = new Set(z.opt.keyOnCommitWithKNoop)
 	}
 
 	_initNotifier(ctx:Context){
@@ -291,6 +303,10 @@ class Processor extends Module.RimeProcessor{
 			ctx.clear()
 			return pr.kAccepted
 		}
+
+
+
+
 		// commit from 2nd
 		const reprNum = tonumber(repr)
 		if(reprNum != void 0){
@@ -302,6 +318,15 @@ class Processor extends Module.RimeProcessor{
 			return pr.kAccepted
 		}
 
+		if(mod.keyOnCommitWithKNoop.has(repr)){
+			const candText = mod.getSelectedCandText(ctx)
+			const toCommit = mod.status.teengqPeeng.allCharToStr()+candText
+			env.engine.commit_text(toCommit)
+			mod.clearStatus()
+			ctx.clear()
+			return pr.kNoop
+		}
+		
 		if(mod.opt.keyOnCommitRawInput.includes(repr)){
 			const historyInput = mod.status.teengqPeeng.allInputToStr()
 			const toCommit = historyInput+input

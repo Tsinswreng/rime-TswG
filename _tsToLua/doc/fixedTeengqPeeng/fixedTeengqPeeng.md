@@ -22,21 +22,10 @@
 ![alt text](img/Code_MSDKi3W9uQ.gif)
 
 
-
-
-
-
-
 實現之理則:
 開一個變量用來存已經頂屏的字及其編碼 、頂屏的時候把已經頂屏的字及編碼存到那個變量裏、然後再把他從輸入框裏刪掉、這樣輸入框裏剩下的就只有未頂屏的字。
 
-
-
-
 ## 安裝
-
-
-
 假設您要爲example.schema.yaml配置該腳本:
 
 1. 在example.schema.yaml頂層加入以下內容:
@@ -73,7 +62,7 @@ engine:
 3. 確保`<用戶文件根目錄>/rime.lua`中引入了`fixedTeengqPeeng.lua`模塊。需要有 名爲`fixedTeengqPeeng_P`的全局變量
 
 ```lua
-local fixedTeengqPeeng = require('TswG.fixedTeengqPeeng')
+local fixedTeengqPeeng = require('TswG.mod.fixedTeengqPeeng')
 fixedTeengqPeeng_P = fixedTeengqPeeng.processor
 ```
 
