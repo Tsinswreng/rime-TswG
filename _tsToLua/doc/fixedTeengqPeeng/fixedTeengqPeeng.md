@@ -44,6 +44,10 @@ TswG: {
     ,keyOnCommitRawInput: [
       'Return'
     ]
+	# 通過符號鍵等 上屏所有字與符號
+    ,keyOnCommitWithKNoop: [
+      'comma', 'period'
+    ]
   }
 }
 ```
