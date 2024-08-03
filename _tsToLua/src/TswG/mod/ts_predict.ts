@@ -71,7 +71,7 @@ class ModOpt{
 	switchName = 'predict' //--此模塊的開關ˋ在schema中之名 須添加在switches中
 	activeSwitchName = 'active_predict'
 	passiveSwitchName = 'passive_predict'
-	showComment = true //-- 爲true旹 聯想候選無註釋
+	showComment = true //-- 爲true旹 聯想候選無註釋?
 	showQuality = true // 在comment中 示權重
 	//reverseName = 'TswG-predict' //dyMem 之名
 	reverseDbName = 'prd' //靜態聯想詞ʹ名 及 動態聯想詞ʹ僞方案ʹ名
@@ -469,7 +469,7 @@ class Mod extends Module.ModuleStuff{
 			//錄史
 			z.mortalHistory.addBackF(commit)
 			z.immortalHistory.addBackF(commit)
-			//TODO 未完
+			//TODO 未完?
 
 			if( algo.strContainsAnyInSet(commit, z.excludedChars) ){
 				z.clearHistory()

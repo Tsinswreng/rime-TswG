@@ -3,16 +3,21 @@
  * This code is licensed under MIT License.
  * https://github.com/Tsinswreng/rime-TswG
  * 
-*/
+ */
 
 /**
- * 2024-04-14T22:45:14.000+08:00
+ * 2024-08-03T16:17:11.205+08:00
  */
-export class CyclicArray<T>{
+export default class CyclicArray<T>{
 	protected constructor(){
 		
 	}
 
+
+	
+	static new<T>(capacity:number):CyclicArray<T>
+	static new(...args:any[]):never
+	
 	static new<T>(capacity:number){
 		const o = new this<T>()
 		o.__init__(capacity)
@@ -142,7 +147,9 @@ export class CyclicArray<T>{
 			return void 0
 		}
 		const t = this.back
-		delete this._data[this._backI]
+		//delete this._data[this._backI]
+		//@ts-ignore
+		this._data[this._backI] = void 0
 		this._size -= 1
 		CyclicArray.posSub(this._backI, this._capacity, 1)
 		// this._backI = this._backI-1
@@ -164,6 +171,38 @@ export class CyclicArray<T>{
 		this._data[this._frontI] = ele
 		this._size += 1
 		return true
+	}
+
+	/**
+	 * 強添于尾、若滿則擠出頭元素
+	 * @param ele 
+	 * @returns 被擠出之元素
+	 * //TODO test
+	 */
+	addBackF(ele:T){
+		const z = this
+		if(z.addBack(ele)){ //成功
+			return
+		}
+		const front = z.removeFront()
+		z.addBack(ele)
+		return front
+	}
+
+	/**
+	 * 強添于頭、若滿則擠出尾元素
+	 * @param ele 
+	 * @returns 被擠出之元素
+	 * //TODO test
+	 */
+	addFrontF(ele:T){
+		const z = this
+		if(z.addFront(ele)){ //成功
+			return
+		}
+		const back = z.removeBack()
+		z.addFront(ele)
+		return back
 	}
 
 	/**
@@ -194,8 +233,8 @@ export class CyclicArray<T>{
 	}
 
 	/**
-	 * 從頭到尾 取第num個元素
-	 * @param num 
+	 * 從頭到尾 取num位之元素
+	 * @param num 從0始
 	 * @returns 
 	 */
 	frontGet(num:number){
@@ -203,6 +242,12 @@ export class CyclicArray<T>{
 		return this._data[index]
 	}
 
+	/**
+	 * @see this.frontGet
+	 * @param num 
+	 * @param item 
+	 * @returns 
+	 */
 	frontSet(num:number, item:T){
 		let index = CyclicArray.posAdd(this._frontI, this.capacity, num)
 		this._data[index] = item
@@ -210,8 +255,8 @@ export class CyclicArray<T>{
 	}
 
 	/**
-	 * 從尾到頭 取第num個元素
-	 * @param num 
+	 * 從尾到頭取num位之元素
+	 * @param num 從0始
 	 * @returns 
 	 */
 	backGet(num:number){
@@ -219,6 +264,12 @@ export class CyclicArray<T>{
 		return this._data[index]
 	}
 
+	/**
+	 * @see backGet
+	 * @param num 
+	 * @param item 
+	 * @returns 
+	 */
 	backSet(num:number, item:T){
 		let index = CyclicArray.posSub(this._backI, this.capacity, num)
 		this._data[index] = item
@@ -230,7 +281,10 @@ export class CyclicArray<T>{
 			return void 0
 		}
 		const t = this.front
-		delete this._data[this._frontI]
+
+		//delete this._data[this._frontI]
+		//@ts-ignore
+		this._data[this._frontI] = void 0
 		//this._frontI = (this._frontI+1)%this.capacity
 		this._frontI = CyclicArray.posAdd(this._frontI, this._capacity, 1)
 		this._size -= 1
@@ -245,6 +299,7 @@ export class CyclicArray<T>{
 		}
 		const neoData = s.toArray()
 		//delete s._data
+		//@ts-ignore
 		s._data = neoData
 		s._capacity = neoCapacity
 		s._frontI = 0
@@ -271,8 +326,9 @@ export class CyclicArray<T>{
 			for(let i = z._frontI; i < z.data.length; i++){
 				frontIToDataEnd.push(z._data[i])
 				//@ts-ignore
-				delete z.data[i] //如是則得empty item 洏非undefined
-				//z.data[i] = void 0
+				//delete z.data[i] //如是則得empty item 洏非undefined
+				//@ts-ignore
+				z.data[i] = void 0
 			}
 
 			z._frontI += add

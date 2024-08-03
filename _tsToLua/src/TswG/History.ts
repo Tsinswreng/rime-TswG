@@ -5,7 +5,7 @@
  * 
 */
 
-import { CyclicArray } from "./CyclicArray";
+import CyclicArray from "./CyclicArray";
 
 
 export class History<T> extends CyclicArray<T>{
@@ -13,17 +13,18 @@ export class History<T> extends CyclicArray<T>{
 		super()
 	}
 	
-	static new<T>(...prop:Parameters<typeof CyclicArray.new>):History<T>
+	static new<T>(capacity:int):History<T>
+	static new<T>(...prop:any[]):never
 	//static new<T>(...prop:any[]):never
 
-	static new<T>(...prop:Parameters<typeof CyclicArray.new>):History<T>{
+	static new<T>(capacity:int):History<T>{
 		// const p = CyclicArray.new(...prop)
 		// const c = new this<T>()
 		// setPrototypeOf(p,c)
 		
 		//setPrototypeOf(c,p)
 		const p = new this()
-		p.__init__(...prop)
+		p.__init__(capacity)
 		return p as History<T>
 	}
 
@@ -31,13 +32,13 @@ export class History<T> extends CyclicArray<T>{
 		super.__init__(capacity)
 	}
 
-	addBackF(ele:T){
-		const z = this
-		if(z.isFull()){
-			z.removeFront()
-		}
-		z.addBack(ele)
-	}
+	// addBackF(ele:T){
+	// 	const z = this
+	// 	if(z.isFull()){
+	// 		z.removeFront()
+	// 	}
+	// 	z.addBack(ele)
+	// }
 	_cBcAbc=''
 }
 
