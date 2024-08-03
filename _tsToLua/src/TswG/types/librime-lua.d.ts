@@ -551,6 +551,12 @@ interface Component{
 }
 
 declare var rime_api:Rime_api
+/**
+ * log.warning('123') // ok
+ * log['warning']('123') // ok
+ * const lv = 'warning'; log[lv]('123') // error:
+ * LuaProcessor::ProcessKeyEvent of fixedTeengqPeeng_P error(2): bad argument #2 to '?' (string expected, got table)
+ */
 declare var log:Log
 declare var _ENV:typeof globalThis
 

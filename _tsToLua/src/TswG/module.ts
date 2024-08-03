@@ -8,6 +8,10 @@
 import { SchemaOpt } from "@/SchemaOpt"
 import { ParseType } from "./ts_Type"
 
+/**
+ * 所有鍵須設初值、不能為undefined
+ * 鍵芝空者不會從schema.yaml中賦入
+ */
 interface ModOpt extends kvobj{}
 
 export abstract class ModuleStuff{

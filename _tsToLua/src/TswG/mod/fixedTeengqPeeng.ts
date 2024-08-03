@@ -7,6 +7,9 @@
 
 import * as Module from '@/module'
 import * as Str from '@/strUt'
+import * as json from '@/_lua_lib/ison'
+import { tlog } from '@/Log'
+
 
 class OptKeyNames{
 	keyOnClearStatus = 'keyOnClearStatus'
@@ -23,7 +26,7 @@ class Opt{
 
 	/** 固定碼長 */
 	fixedLength = 3
-
+	logLevel?:str = ""
 	/** 㕥清除本輪輸入狀態之諸鍵 */
 	keyOnClearStatus = [
 		'Return'
@@ -72,9 +75,9 @@ class TeengqPeeng{
 		return z
 	}
 
-	protected _history = [] as CharEtInput[]
-	get history(){return this._history}
-	protected set history(v){this._history = v}
+	protected _stack = [] as CharEtInput[]
+	get stack(){return this._stack}
+	protected set stack(v){this._stack = v}
 
 	protected _str = ''
 	/** 用于在prompt中顯示 */
@@ -84,23 +87,23 @@ class TeengqPeeng{
 
 	push(charEtInput: CharEtInput){
 		const z = this
-		z.history.push(charEtInput)
+		z.stack.push(charEtInput)
 		z.str += charEtInput.char
 	}
 
 	pop(){
 		const z = this
-		const ans = z.history.pop()
+		const ans = z.stack.pop()
 		z._str = z.allCharToStr()
 		return ans
 	}
 
 	allCharToStr(){
-		return this.history.map(x=>x.char).join('')
+		return this.stack.map(x=>x.char).join('')
 	}
 
 	allInputToStr(){
-		return this.history.map(x=>x.input).join('')
+		return this.stack.map(x=>x.input).join('')
 	}
 
 	getPrompt(){
@@ -108,7 +111,7 @@ class TeengqPeeng{
 	}
 
 	hasHistory(){
-		return this.history.length > 0
+		return this.stack.length > 0
 	}
 	
 }
@@ -178,9 +181,6 @@ class Mod extends Module.ModuleStuff{
 	get selectConne(){return this._selectConne}
 	protected set selectConne(v){this._selectConne = v}
 
-
-	
-
 	override _init(env: Env): void {
 		const z = this
 		super._init(env)
@@ -220,9 +220,6 @@ class Mod extends Module.ModuleStuff{
 		}
 	}
 
-
-	
-
 	clearStatus(){
 		const z = this
 		z.status = new Status()
@@ -248,7 +245,37 @@ class Mod extends Module.ModuleStuff{
 		}
 		return false
 	}
-	
+
+	logStr(v=''){
+		const z = this
+		const lv = z.opt.logLevel
+		if(lv == void 0 || lv === "" || typeof log[lv] !== 'function'){
+			return
+		}
+		
+		tlog[lv](v)
+	}
+
+	log(...v:any[]){
+		const z = this
+		const lv = z.opt.logLevel
+		if(lv == void 0 || lv === "" || typeof log[lv] !== 'function'){
+			return
+		}
+		const sb = [] as str[]
+		for(const item of v){
+			if(typeof item === 'string'){
+				sb.push(item)
+			}else{
+				const j = json.encode(item)
+				sb.push(j)
+			}
+		}
+		const ans = sb.join('')
+		z.logStr(ans)
+	}
+
+
 }
 export const mod = Mod.new()
 
@@ -265,6 +292,22 @@ class Processor extends Module.RimeProcessor{
 		const ctx = env.engine.context
 		const repr = key.repr()
 		const input = ctx.input
+		function rec(){
+			mod.logStr(`$input: ${input}`)
+			mod.log(`$curCharEtInput: `,mod.status.curCharEtInput)
+			mod.log(`$stack: `,mod.status.teengqPeeng.stack)
+		}
+		mod.log(`----outer----`)
+		rec()
+
+		function commit_text(v:str){
+			mod.log(`----commit_text----`)
+			rec()
+			env.engine.commit_text(v)
+			mod.log(`----end commit_text----`)
+		}
+
+		
 		
 		if(!ctx.is_composing()){
 			return pr.kNoop
@@ -296,51 +339,71 @@ class Processor extends Module.RimeProcessor{
 		
 		//commit 1st
 		if(repr === 'space'){ 
+			mod.log(`----if space----`)
+			rec()
 			const candText = mod.getSelectedCandText(ctx)
 			const toCommit = mod.status.teengqPeeng.allCharToStr()+candText
-			env.engine.commit_text(toCommit)
+			commit_text(toCommit)
 			mod.clearStatus()
 			ctx.clear()
+			mod.log(`----endif space----`)
+			rec()
 			return pr.kAccepted
 		}
-
-
-
 
 		// commit from 2nd
 		const reprNum = tonumber(repr)
 		if(reprNum != void 0){
+			mod.log(`----if reprNum----`)
+			rec()
 			const candText = mod.getCandAt(ctx, reprNum-1)?.text??''
 			const toCommit = mod.status.teengqPeeng.allCharToStr()+candText
-			env.engine.commit_text(toCommit)
+			//env.engine.commit_text(toCommit)
+			commit_text(toCommit)
 			mod.clearStatus()
 			ctx.clear()
+			mod.log(`----endif reprNum----`)
+			rec()
 			return pr.kAccepted
 		}
 
 		if(mod.keyOnCommitWithKNoop.has(repr)){
+			mod.log(`----if keyOnCommitWithKNoop----`)
+			rec()
 			const candText = mod.getSelectedCandText(ctx)
 			const toCommit = mod.status.teengqPeeng.allCharToStr()+candText
-			env.engine.commit_text(toCommit)
+			//env.engine.commit_text(toCommit)
+			commit_text(toCommit)
 			mod.clearStatus()
 			ctx.clear()
+			mod.log(`----endif keyOnCommitWithKNoop----`)
+			rec()
 			return pr.kNoop
 		}
 		
 		if(mod.opt.keyOnCommitRawInput.includes(repr)){
+			mod.log(`----if commit raw----`)
+			rec()
 			const historyInput = mod.status.teengqPeeng.allInputToStr()
 			const toCommit = historyInput+input
-			env.engine.commit_text(toCommit)
+			//env.engine.commit_text(toCommit)
+			commit_text(toCommit)
 			mod.clearStatus()
 			ctx.clear()
+			mod.log(`----endif commit raw----`)
+			rec()
 			return pr.kAccepted
 		}
 
 		if(input.length === mod.opt.fixedLength){
+			mod.log(`----if fixedLength----`)
+			rec()
 			const candText = mod.getSelectedCandText(ctx)
 			//mod.status.firstCharInCand = Str.utf8sub(candText, 0, 0)
 			mod.status.curCharEtInput = CharEtInput.new(candText, input)
 			mod.setPrompt(ctx, mod.status.teengqPeeng.getPrompt())
+			mod.log(`----endif fixedLength----`)
+			rec()
 			return pr.kNoop
 		}
 		
@@ -348,6 +411,8 @@ class Processor extends Module.RimeProcessor{
 		
 		if(input.length === mod.opt.fixedLength+1){
 			//mod.teengqPeeng += mod.status.firstCharInCand
+			mod.log(`----if fixedLength+1 ----`)
+			rec()
 			const toPush = mod.status.curCharEtInput
 			if(toPush != void 0){
 				mod.status.teengqPeeng.push(toPush)
@@ -359,8 +424,11 @@ class Processor extends Module.RimeProcessor{
 			//ctx.pop_input(mod.opt.fixedLength+1) //清除指定個數的輸入
 			ctx.push_input(mod.status.neoInput)
 			mod.setPrompt(ctx, mod.status.teengqPeeng.getPrompt())
+			mod.log(`----endif fixedLength+1 ----`)
+			rec()
 			return pr.kNoop
 		}
+
 		mod.setPrompt(ctx, mod.status.teengqPeeng.getPrompt())
 		return pr.kNoop
 	}

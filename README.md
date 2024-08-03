@@ -96,6 +96,43 @@ npx tstl -p .
 
 該項目曾經由純lua語言編寫、現已改用typescirpt重構。原先的lua文件夾已移至/old目錄下、且不再維護。以下爲**舊版的**README.md。
 
+
+## 調試
+
+
+**實時觀察日誌輸出:**
+
+小狼毫:
+
+在powershell中執行以下命令:
+
+```powershell
+$path = "$env:LOCALAPPDATA\Temp\rime*INFO*"
+Get-Content -Path $path -Wait | ForEach-Object {
+    if ($_ -match '^I') {
+        Write-Host $_ -ForegroundColor White
+    } elseif ($_ -match '^W') {
+        Write-Host $_ -ForegroundColor Yellow
+    } elseif ($_ -match '^E') {
+        Write-Host $_ -ForegroundColor Red
+    } else {
+        Write-Host $_
+    }
+}
+```
+
+或者使用bash終端(如Git bash)
+
+```bash
+tail -f ~/AppData/Local/Temp/rime*INFO*  | awk  '
+BEGIN { e="\033[31;1m" ; w="\033[33;1m" ; r="\033[0m" }
+/^I/ { printf r }
+/^W/ { printf w }
+/^E/ { printf e }
+{print $0}
+'
+```
+
 ## 舊版README.md:
 
 ## usage

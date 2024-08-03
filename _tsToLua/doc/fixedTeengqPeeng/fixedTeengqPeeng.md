@@ -36,6 +36,8 @@ TswG: {
   # 該模塊節點
   fixedTeengqPeeng: {
     fixedLength: 4 # 固定碼長長度
+	# 日誌輸出等級
+    ,logLevel: "warning" # info, warning, error, else is for none
 	# 㕥清除本輪輸入狀態之諸鍵
     ,keyOnClearStatus: [
       'Return'
