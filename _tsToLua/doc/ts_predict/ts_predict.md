@@ -122,3 +122,107 @@ engine:
 
 ```
 
+## 使用僞方案建立自定義靜態詞庫:
+
+假設僞方案id爲`prd`
+
+1. 創建`prd.dict.yaml`
+
+```yaml
+# Rime dictionary: prd
+# encoding: utf-8
+---
+name: prd
+version: "0.1"
+columns:
+  - text
+  - code
+  - weight
+use_preset_vocabulary: false
+...
+一	一_2868
+一一	〇_0
+一一	九_299
+一	丁_0
+一	七_551
+一	丈_598
+一	三_583
+一	上_1
+一	下_95120
+一下	下_900
+一下	了_1
+一下	來_536
+一下	兒_441
+一下	午_1
+一下	去_532
+一下	吧_1485
+一下	在_1
+一下	場_434
+一下	子_4704
+一下	就_1
+一下	臺_424
+一	不_750
+一不	做_513
+```
+
+製表符前 爲 已輸入的字詞、製表符之後爲聯想詞、下劃線後爲默認權重。
+
+現在需要編譯這個dict、獲取prd.reverse.bin文件。
+
+
+2. 創建`prd.schema.yaml`㕥令rime編譯`prd.dict.yaml`
+
+以下爲一個簡單的示例
+
+```yaml
+#23.03.18
+# Rime schema
+# encoding: utf-8
+
+schema:
+  schema_id: prd
+  name: prd
+  version: ''
+  author: ''
+    
+  description: |
+
+  dependencies:
+    
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ 中文, 西文 ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - name: simplification
+    states: [ 漢字, 汉字 ]
+  - name: ascii_punct
+    states: [ 。，, ．， ]
+
+engine:
+  processors:
+
+  segmentors:
+
+  translators:
+
+  filters:
+
+speller:
+  alphabet: zyxwvutsrqponmlkjihgfedcba$
+  delimiter: "%"
+
+translator:
+  dictionary: prd #與dict.yaml中name相同
+  #prism: prd
+
+```
+
+
+3. 選中prd方案並部署、在`<用戶文件夾>/build`下獲取`prd.reverse.bin`文件。
+
+4. 將`prd.reverse.bin`文件複製到指定目錄下(默認潙`<rime-user-dir>/build_`、需與配置的目錄一致)
+
+完成。

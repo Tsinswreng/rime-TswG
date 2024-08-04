@@ -13,17 +13,56 @@
 
 #### ts_cmd
 
-命令。可以通過打字來執行一些操作。如輸入`$s`切換到簡體、輸入`$S`切換成繁體等。
+可以通過打字來執行一些操作。如輸入`$s`切換到簡體、輸入`$S`切換成繁體等。
 
 默認用`$`號作爲命令前綴、用`,`作爲參數分隔符、用空格提交命令。
 
-說明書詳見ts_cmd.md
+**基本命令:**
+
+- `$s`: 切換到簡體
+- `$S`: 切換到繁體
+
+
+- `$l`: 調用lua的`load`函數來上屏lua表達式的結果。可用作簡易計算。
+
+如執行 `$l,2+3` 後上屏`5`; 執行`$l,'\t'`後上屏製表符; 執行`$l,math.log(5)` 上屏 `1.6094379124341`。
+
+下圖是動圖
+
+![alt text](img/notepad++_EXKDdRCEYF.gif)
+
+- `u`: 以十六進制上屏unicode字符。
+
+(下圖是gif)
+
+![alt text](img/Code_D17D2saPzf.gif)
+
+
+第一個參數: 16進制unicode字符碼。 如 `$u,4e2d` -> `中`; 
+
+第二個參數: 可選、表示上屏的字符數、按unicode順序遞增。
+
+如 `$u,4000,10` -> `䀀䀁䀂䀃䀄䀅䀆䀇䀈䀉` (10個漢字、範圍為`U+4000`到`U+4009`)
+
+
+說明書詳見[ts_cmd.md](_tsToLua/doc/ts_cmd/ts_cmd.md)
+
+
 
 ### ts_predict
 
 聯想詞
 
-說明書詳見ts_predict.md
+支持主動聯想(上屏後主動顯示聯想詞),
+
+被動聯想(輸入旹、候選詞的詞序根據之前的輸入而調整);
+
+支持動態聯想詞庫
+
+
+![alt text](img/notepad++_Hk2mdipCgV-1.gif)
+
+說明書詳見[ts_predict.md](_tsToLua/doc/ts_cmd/ts_predict.md)
 
 ### coinage
 
@@ -69,11 +108,16 @@ librime-lua 版本 >= 200 (小狼毫版本 >= 0.15.0)
 
 2. 複製本倉庫到本地:
 
+手動下載 或 用`git clone`。
+
 使用命令:
 ```bash
 git clone https://github.com/Tsinswreng/rime-TswG.git
 ```
+
 或手動下載zip包並解壓縮
+
+![alt text](img/828e542c6f10911021bdd5122a27aaf9.png)
 
 3. 將獲取到的文件夾改名作`User_Data`、置於原本的`User_Data`位置處。
 

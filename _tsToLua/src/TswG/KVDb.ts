@@ -95,7 +95,7 @@ export class CntTimeV extends EntryV{
 
 
 /**
- * 用leveldb錄某key之頻次與末次修改ʹ時間
+ * 用leveldb錄某key之頻次與末次修改ʹ時間 與 創ʹ時
  */
 export class Cnt__Time_Ldb{
 
@@ -167,55 +167,4 @@ export class Cnt__Time_Ldb{
 			return db.update(key, neoStr)
 		}
 	}
-
-	// /** 一個幽靈，一個共產主義的幽靈，在歐洲遊蕩。爲了對這個幽靈進行神聖的圍剿
-	//  * @deprecated
-	//  */
-	// geneValueStr_deprecated(oldCnt:number, increment:num){
-	// 	const z = this
-	// 	let sb = [] as str[]
-	// 	const neoCnt = oldCnt+increment
-	// 	sb.push(neoCnt+'')
-	// 	sb.push(z.delimiter)
-	// 	const neoTime = z.getTime()
-	// 	sb.push(neoTime+'')
-	// 	return sb.join('')
-	// }
-
-
-	// /**
-	//  * @deprecated
-	//  */
-	// parseValue_deprecated(valStr:str):[int, str]{
-	// 	const z = this
-	// 	const splt = Str.split(valStr, z._delimiter)
-	// 	const cntStr = splt[0]??'0'
-	// 	const timeStr = splt[1]??''
-	// 	const cnt = tonumber(cntStr)??0
-	// 	return [cnt, timeStr]
-	// }
-
-	// update_deprecated(key:str, increment:num=1){
-	// 	const z = this
-	// 	const db = z.ldb
-	// 	const got = db.fetch(key)
-	// 	if(got == void 0){ //初添
-	// 		return db.update(key, z.geneValueStr_deprecated(0, increment))
-	// 	}else{
-	// 		const [cnt, toki] = z.parseValue_deprecated(got)
-	// 		const neoVal = z.geneValueStr_deprecated(cnt, increment)
-	// 		return db.update(key, neoVal)
-	// 	}
-	// 	return false
-	// }
-
-	/**
-	 * //TODO
-	 */
-	// merge(other:Cnt__Time_Ldb){
-	// 	const hisDba = other.ldb.query('')
-	// 	for(const [k,v] of hisDba.iter()){
-	// 		const [hisCnt, hisToki] = other.parseValue_deprecated(v)
-	// 	}
-	// } 天接雲濤連曉霧星河欲轉千帆舞仿佛夢魂歸帝所聞天語殷勤問我歸何處我報路長嗟日暮學詩漫有驚人句九萬里風鵬正舉風休住蓬舟吹取三山去
 }

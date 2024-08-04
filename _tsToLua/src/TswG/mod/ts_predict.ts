@@ -35,6 +35,12 @@ import { nn, nna } from '@/ts_Ut'
 import * as Str from '@/strUt'
 import { LevelDbPool } from '@/LevelDbPool'
 import { Cnt__Time_Ldb } from '@/KVDb'
+
+
+interface I_lookup{
+	lookup(key:str):string
+}
+
 const ldbPool = LevelDbPool.getInst()
 
 // class Count__Time{
@@ -129,7 +135,7 @@ class Mod extends Module.ModuleStuff{
 	protected _immortalHistory:History<string>
 	get immortalHistory(){return this._immortalHistory}
 
-	protected _reverseDb:ReverseDb
+	protected _reverseDb:I_lookup
 	get reverseDb(){return this._reverseDb}
 
 	/** text與custom_code須同 */

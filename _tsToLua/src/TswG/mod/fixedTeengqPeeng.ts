@@ -99,7 +99,8 @@ class TeengqPeeng{
 	}
 
 	allCharToStr(){
-		return this.stack.map(x=>x.char).join('')
+		//return this.stack.map(x=>x.char).join('')
+		return this.str
 	}
 
 	allInputToStr(){
@@ -299,7 +300,7 @@ class Processor extends Module.RimeProcessor{
 		}
 		mod.log(`----outer----`)
 		rec()
-
+		//
 		function commit_text(v:str){
 			mod.log(`----commit_text----`)
 			rec()
