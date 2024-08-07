@@ -28,6 +28,7 @@ export class File{
 				throw IOErr.new(`fileName=\n${args[0]}\nmode=\n${args[0]}\nfile open failed`)
 			}
 			const file = File.new(luaFile)
+			return file
 		} catch (error) {
 			const ioe = IOErr.new()
 			ioe._err = error
@@ -60,6 +61,15 @@ export class File{
 			ioe._err = error
 			throw ioe
 		}
+	}
+
+	write(content:str){
+		const z = this
+		z.luaFile.write(content)
+	}
+
+	flush(){
+		return this.flush()
 	}
 }
 

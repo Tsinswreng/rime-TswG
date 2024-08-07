@@ -550,9 +550,12 @@ class Mod extends Module.ModuleStuff{
 	 * @param c_bc_abc ['不覺曉','眠不覺曉','春眠不覺曉']
 	 * @returns ['曉','覺曉','不覺曉','眠不覺曉','春眠不覺曉']
 	 */
-	expandFirstEleOfCBcAbc(c_bc_abc:string[]){
+	expandFirstEleOfCBcAbc(c_bc_abc:string[]):str[]{
 		//['不覺曉','眠不覺曉','春眠不覺曉']
 		const first = c_bc_abc[0] // "不覺曉"
+		if(first == void 0){
+			return []
+		}
 		if( Str.utf8Len(first) === 1){
 			return c_bc_abc
 		}
@@ -567,6 +570,7 @@ class Mod extends Module.ModuleStuff{
 
 
 	fixGotQuality(q:number){
+		return q
 		let ans = Math.log(q)/1
 		if(ans < 0){
 			ans = 0

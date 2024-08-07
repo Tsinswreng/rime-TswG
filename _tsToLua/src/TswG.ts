@@ -113,6 +113,11 @@ const short_src = info1S.short_src
 //-- luaSelector = require("selector").processor
 //-- simplifier = require('simplifier').filter
 
+
+import * as toAsciiMode from '@/mod/toAsciiMode'
+declare var toAsciiMode_P
+toAsciiMode_P = toAsciiMode.processor
+
 const committedWordSaver = require('committedWordSaver')
 declare var committedWordSaver_P
 committedWordSaver_P = committedWordSaver.processor

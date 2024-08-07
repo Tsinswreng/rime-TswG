@@ -82,6 +82,8 @@ interface Context{
 	/**
 	 * 帶手動輸入ʹ分隔符芝未經preedit處理者
 	 * wzyz -> wzy%z  (我在)
+	 * 如當按鍵d鍵旹、processors中之speller會把d加入input、在此speller之前之processor、同時監測repr與input、會發現repr潙d旹d尚未入input
+	 * 
 	 */
 	input: string
 	caret_pos: integer
@@ -506,11 +508,11 @@ interface Processor extends Component_{
 	 * @param keyEvent 
 	 * @return ProcessResult
 	 */
-	process_key_event(this:void, keyEvent:KeyEvent):0|1|2
+	process_key_event(keyEvent:KeyEvent):0|1|2
 }
 
 interface Segmentor extends Component_{
-	proceed(this:void, segmentation:Segmentation):boolean
+	proceed(segmentation:Segmentation):boolean
 }
 
 interface Translator extends Component_{

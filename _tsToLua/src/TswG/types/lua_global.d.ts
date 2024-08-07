@@ -83,6 +83,7 @@ declare namespace Lua{
 		time(this:void):integer
 		date(this:void, format?:string)
 		getenv(this:void, varname:string):string
+		execute(this:void, command:string):integer
 	}
 
 	interface Package{
@@ -105,6 +106,7 @@ declare namespace Lua{
 		read(this, format:str)
 		write(this, content:string)
 		lines(this, format?:string):LuaIterable<string>
+		flush(this)
 	}
 
 	interface Io{

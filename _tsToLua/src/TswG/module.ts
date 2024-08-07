@@ -43,9 +43,9 @@ export abstract class ModuleStuff{
 	_init(env:Env){
 		const z = this
 		z.env = env
-		if(z.inited){
-			return
-		}
+		// if(z.inited){ 換方案時不會再次初始化
+		// 	return
+		// }
 		z._init_opt(env)
 	}
 

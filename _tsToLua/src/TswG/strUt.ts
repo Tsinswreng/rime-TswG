@@ -20,11 +20,13 @@ export function utf8At(str:string, index:integer){
 }
 
 export function utf8Len(this:void, str:string){
+
 	const ans = utf8.len(str)
 	if(ans == void 0){
-		throw new Error(`${str}\nstr not valid`)
+		throw new TypeError(`${str}\nstr not valid`)
 	}
 	return ans
+
 }
 
 
