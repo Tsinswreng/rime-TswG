@@ -1,0 +1,194 @@
+# Rime schema
+# encoding: utf-8
+# Copyright (c) 2024 TsinswrengGwāng<Tsinswreng@gmail.com>
+# This code is licensed under MIT License.
+# https://github.com/Tsinswreng/rime-TswG
+
+
+TswG: {
+  ts_predict: {
+# charToPush: 顯示主動聯想詞旹 插入的輸入字符。緣rime中 無輸入字符旹 不能憑空出候選。
+# 必須爲單個可打印的ascii字符
+# 且該字符必須加在speller/alphabet中
+    charToPush: '^'
+# 用空格鍵清除聯想候選
+    ,clearOnSpace: false
+# 默認加在所有聯想候選詞列表最後的候選詞。
+#當輸入一些生僻字等旹、查詢到的聯想詞可能過少甚至沒有、此時則顯示下面的字。
+    ,defaultPredict: ['的','了','嗎','是','不', '呢']
+#開關的名字
+    ,switchName: 'predict'
+    ,activeSwitchName: 'active_predict'
+    ,passiveSwitchName: 'passive_predict'
+# 顯示候選注釋
+    ,showComment: true
+# 顯示候選權重
+    ,showQuality: false
+# 模塊記錄的輸入歷史深度。輸入歷史將用于生成用戶聯想詞、寫入動態詞庫。
+# 請勿將請項設定過大、因爲 由輸入歷史生成用戶詞旹涉及O(n^2)的計算量。
+    ,commitHistoryDepth: 4
+# 主動聯想候選項注釋的前綴。
+    ,commentMark: {
+      static: '*' # 靜態候選
+      ,dynamic: '' # 動態候選
+    }
+    ,userPredictRecordDbName: 'userPredictRecord.ldb'
+#排除的字符、不會進入動態聯想詞庫
+    ,excludedChars: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+# 靜態聯想詞ʹ名 及 動態聯想詞ʹ僞方案ʹ名
+    ,reverseDbName: 'prd'
+# 靜態聯想詞 reverse.bin 路徑、 =後爲程序中設置的默認值
+    #,reverseDbPath: = 'build_/'+this.reverseDbName+'.reverse.bin' //靜態聯想詞
+  }
+  ,ts_cmd: {
+    prompt: '$' # 命令提示符(前綴)
+    ,argSeparator: ',' # 參數分隔符
+  }
+}
+
+schema:
+  schema_id: predict-example
+  name: predict-example
+  version: ""
+  author: TsinswrengGwāng<Tsinswreng@gmail.com>
+  #description: |-
+  dependencies:
+
+
+
+switches:
+  - name: ascii_mode
+    states: [ 中, A ]
+  - name: predict
+    states: ['聯-', '聯+']
+  - name: simplification
+    states: [ 漢, 汉 ]
+  - name: english
+    states: ['英-', '英+']
+  - name: full_shape
+    states: [ ☽,⬤ ]
+  - name: japanese_kanji
+    states: ['日-', '日+']
+  # - name: prediction
+  #   states: [ 關預, 開預 ]
+    #reset: 1
+  # - name: extended_charset
+  #   states: [ 常, 廣 ]
+  #   reset: 0
+  # - name: ascii_punct
+  #   states: [ 。，, ．， ]
+  #- name:  _hide_key_hint
+    #states: [ 有, 無助记 ]  
+  - name: _hide_comment
+    states: ['註+', '註-']  #同文 有無註釋
+  - name: hint_quality
+    states: ['權-', '權+']
+    #reset: 1
+
+
+engine:
+  processors:
+    - lua_processor@ts_cmd_P
+    - lua_processor@ts_predict_P
+    - ascii_composer # ※ 處理西文模式及中西文切換
+    - recognizer # ※ 與 matcher 搭配，處理符合特定規則的輸入碼，如網址、反查等
+    - key_binder # ※ 在特定條件下將按鍵綁定到其他按鍵，如重定義逗號、句號爲候選翻頁鍵
+    - speller  # ※ 拼寫處理器，接受字符按鍵，編輯輸入碼
+    - punctuator # ※ 句讀處理器，將單個字符按鍵直接映射爲文字符號
+    - navigator # ※ 處理輸入欄內的光標移動鍵
+    - selector # ※ 選字處理器，處理數字選字鍵、上、下候選定位、換頁鍵
+    - express_editor # ※ 編輯器，處理空格、回車上屏、回退鍵等
+
+  segmentors:
+    - matcher # 配合recognizer標識符合特定規則的段落，如網址、反查等，加上特定tag #!要寫在前面
+    - affix_segmentor@hiragana
+    - affix_segmentor@katakana
+    - ascii_segmentor # 標識西文段落〔譬如在西文模式下〕字母直接上屛
+    - abc_segmentor #標識常規的文字段落，加上abc這個tag
+    - punct_segmentor #標識句讀段落〔鍵入標點符號用〕加上punct這個tag
+    - fallback_segmentor #標識其他未標識段落 
+  translators:
+    - lua_translator@ts_cmd_T
+    - lua_translator@ts_predict_T
+    - script_translator
+    #- reverse_lookup_translator
+    - history_translator@history
+    - punct_translator
+    #- lua_translator@fillMenuT # 稍增卡頓
+
+  filters:
+    - lua_filter@ts_predict_F
+    #- uniquifier 
+    - lua_filter@limitFilter_F #
+    #- single_char_filter
+    #- cjk_minifier
+    - simplifier
+speller:
+  # finals: 1890-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`!@[]{}\;:'",<.>/?"%"
+  alphabet: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`!@-\\[\\]\\{\\}\\;\':\",\\./<>?^$
+  #alphabet: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`!@-\\[\\]\\{\\}\\;':\",\\./<>?^\u0008"
+  initials: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`!@\\[\\]\\{\\}\\;\':\",\\./<>?^$
+  #finals: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1890`!@%-\\[\\]\\{\\}\\;\':\",\\./<>?
+  delimiter: "%"
+
+  algebra:
+    - abbrev/^(.).+$/$1/ #簡拼
+
+translator:
+  dictionary: luna_pinyin
+  prism: luna_pinyin
+  initial_quality: 99 #設定此翻譯器出字優先級
+  spelling_hints: 8
+  enable_completion: true #提前顯示尚未輸入完整碼的字〔僅table_translator有效〕
+  enable_commit_history: false #是否對已上屛詞自動成詞〔僅table_translator有效〕
+  enable_sentence: false #是否開啓自動造句
+  enable_user_dict: true #是否開啓用戶詞典〔用戶詞典記錄動態字詞頻、用戶詞〕
+  user_dict: exampleUserDict
+  enable_encoder: false #是否開啓自動造詞〔僅table_translator有效〕
+  #max_phrase_length: 0 #最大自動成詞詞長〔僅table_translator有效〕
+  sentence_over_completion: false #在無全碼對應字而僅有逐鍵提示時也開啓智能組句〔僅table_translator有效〕
+  enable_charset_filter: true
+  encode_commit_history: true
+  # disable_user_dict_for_patterns:
+  #   - "^[]$"
+  #   - "^[]$"
+  preedit_format:
+    - xform/%/|/
+  comment_format:
+    - xform/%/|/ #分隔
+    - "xform/.*//" #清除
+
+history:
+  user_dict: true
+  dictionary: history
+  input: ";;"
+  size: 9
+  initial_quality: 999999999999 #設定此翻譯器出字優先級
+
+time_translator:
+  initial_quality: 9999
+
+# abc_segmentor:
+#   extra_tags:
+
+
+
+punctuator:
+  import_preset: symbols
+
+key_binder:
+  import_preset: default
+  bindings:
+    - { when: has_menu, accept: Tab, send: percent } #以tab作分隔
+    - { when: has_menu, accept: period, send: period }
+    - { when: paging, accept: minus, send: Page_Up }
+    - { when: paging, accept: plus, send: Page_Up }
+    - { when: has_menu, accept: equal, send: Page_Down }
+
+recognizer:
+  #import_preset: default
+  patterns:
+    punct: "/([0-9]|[a-z])"
+    cmd: "^\\$.+$"
+
+

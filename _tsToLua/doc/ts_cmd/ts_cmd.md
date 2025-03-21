@@ -48,7 +48,7 @@ ts_cmd_T = ts_cmd.translator
 xxx.schema.yaml中:
 
 ```yaml
-Tswg: {
+TswG: {
   ,ts_cmd: {
     prompt: '$' # 命令提示符(前綴)
     ,argSeparator: ',' # 參數分隔符
