@@ -40,7 +40,7 @@
 rime.lua中:
 
 ```lua
-local ts_cmd = require("TswG.mod.ts_cmd")
+local ts_cmd = require("TswG.mod.cmd.ts_cmd")
 ts_cmd_P = ts_cmd.processor
 ts_cmd_T = ts_cmd.translator
 ```
@@ -49,7 +49,7 @@ xxx.schema.yaml中:
 
 ```yaml
 TswG: {
-  ,ts_cmd: {
+  ts_cmd: {
     prompt: '$' # 命令提示符(前綴)
     ,argSeparator: ',' # 參數分隔符
   }
@@ -57,7 +57,6 @@ TswG: {
 
 engine:
   processors:
-    - lua_processor@ts_init_P
     - lua_processor@ts_cmd_P
   translators:
     - lua_translator@ts_cmd_T

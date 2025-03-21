@@ -2,8 +2,13 @@
 
 含主動聯想與被動聯想。
 
-**!!此模塊依賴ts_cmd模塊、請先閱讀ts_cmd模塊的說明書!!**
+2025-03-21T13:53:39.666+08:00_W12-5
 
+此模塊配置過程較煩瑣、加之文檔可能過時或有誤。如果您配置不順利、可嘗試在release區下載預先配置好的User_Data-predict-sample.zip
+
+<!-- **!!此模塊依賴ts_cmd模塊、請先閱讀ts_cmd模塊的說明書!!** -->
+
+此模塊依賴ts_cmd模塊
 
 ## 主動聯想
 
@@ -55,9 +60,20 @@
 
 ## 安裝與配置
 
-請先閱讀ts_cmd模塊的說明書，並安裝ts_cmd模塊。
+<!-- 請先閱讀ts_cmd模塊的說明書，並安裝ts_cmd模塊。 -->
 
-配置好ts_cmd後:
+
+首先配置ts_cmd模塊
+
+rime.lua中:
+
+```lua
+local ts_cmd = require("TswG.mod.cmd.ts_cmd")
+ts_cmd_P = ts_cmd.processor
+ts_cmd_T = ts_cmd.translator
+```
+
+配置好ts_cmd後再配置ts_predict模塊
 
 在rime.lua中:
 
@@ -73,7 +89,15 @@ xxx.schema.yaml中:
 ```yaml
 
 TswG: {
-  ts_predict: {
+
+#ts_cmd模塊的配置:
+  ts_cmd: {
+    prompt: '$' # 命令提示符(前綴)
+    ,argSeparator: ',' # 參數分隔符
+  }
+
+#ts_predict模塊的配置:
+  ,ts_predict: {
 # charToPush: 顯示主動聯想詞旹 插入的輸入字符。緣rime中 無輸入字符旹 不能憑空出候選。
 # 必須爲單個可打印的ascii字符
 # 且該字符必須加在speller/alphabet中
@@ -111,9 +135,11 @@ TswG: {
 
 engine:
   processors:
+    - lua_processor@ts_cmd_P
     - lua_processor@ts_predict_P
 
   translators:
+    - lua_translator@ts_cmd_T
     - lua_translator@ts_predict_T
 
   filters:
@@ -123,6 +149,8 @@ engine:
 ```
 
 ## 使用僞方案建立自定義靜態詞庫:
+
+**倉庫中已提供有prd.dict.yaml和prd.schema.yaml 直接拿來用即可**
 
 假設僞方案id爲`prd`
 
@@ -166,7 +194,6 @@ use_preset_vocabulary: false
 ```
 
 製表符前 爲 已輸入的字詞、製表符之後爲聯想詞、下劃線後爲默認權重。
-倉庫中已提供有prd.dict.yaml 直接拿來用即可
 
 現在需要編譯這個dict、獲取prd.reverse.bin文件。
 
@@ -223,6 +250,8 @@ translator:
 
 
 3. 選中prd方案並部署、在`<用戶文件夾>/build`下獲取`prd.reverse.bin`文件。
+
+![](assets/2025-03-21-14-00-01.png)
 
 4. 將`prd.reverse.bin`文件複製到指定目錄下(默認潙`<rime-user-dir>/build_`、需與配置的目錄一致)
 
