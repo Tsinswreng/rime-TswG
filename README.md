@@ -49,6 +49,7 @@
 
 
 
+
 ### ts_predict
 
 聯想詞
@@ -62,7 +63,7 @@
 
 ![alt text](img/notepad++_Hk2mdipCgV-1.gif)
 
-說明書詳見[ts_predict.md](_tsToLua/doc/ts_cmd/ts_predict.md)
+說明書詳見[ts_predict.md](_tsToLua/doc/ts_predict/ts_predict.md)
 
 ### coinage
 
