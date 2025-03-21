@@ -166,6 +166,7 @@ use_preset_vocabulary: false
 ```
 
 製表符前 爲 已輸入的字詞、製表符之後爲聯想詞、下劃線後爲默認權重。
+倉庫中已提供有prd.dict.yaml 直接拿來用即可
 
 現在需要編譯這個dict、獲取prd.reverse.bin文件。
 
