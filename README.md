@@ -96,41 +96,6 @@ TswG/	# 產出的.lua文件。每個.ts對應一個.lua。目錄結構與ts源�
 
 librime-lua 版本 >= 200 (小狼毫版本 >= 0.15.0)
 
-## 安裝
-
-若您不瞭解在輸入方案中部署lua腳本的流程、建議您先閱讀[librime-lua文檔](https://github.com/hchunhui/librime-lua/wiki/Scripting)前面部分。
-
-**警告: 若您不了解lua腳本的部署流程、爲防止與原本用戶文件夾中的內容衝突、建議您另設一個用戶文件夾、測試完畢後再遷移到原本用戶文件夾。按照以下步驟操作:**
-
-假設: 您使用小狼毫、您的用戶文件夾爲`User_Data`
-
-
-1. 退出小狼毫算法服務、並將用戶文件夾改名、如改名作`_User_Data`
-
-2. 複製本倉庫到本地:
-
-手動下載 或 用`git clone`。
-
-使用命令:
-```bash
-git clone https://github.com/Tsinswreng/rime-TswG.git
-```
-
-或手動下載zip包並解壓縮
-
-![alt text](img/828e542c6f10911021bdd5122a27aaf9.png)
-
-3. 將獲取到的文件夾改名作`User_Data`、置於原本的`User_Data`位置處。
-
-4. 從源碼構建(或從release下載預先編譯好的lua文件夾壓縮包)。源碼構建方法見後文。構建成功後、/lua目錄下會有產出的lua腳本。
-
-5. 按需安裝、參考`_tsToLua/doc`下相應模塊的說明書。
-
-6. 調試無誤後、恢復至原本的用戶文件夾。
-
-
-
-
 ## 從源碼構建
 
 1. 確保你已經安裝了node.js
