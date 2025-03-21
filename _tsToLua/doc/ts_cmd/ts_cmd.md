@@ -60,7 +60,7 @@ engine:
     - lua_processor@ts_init_P
     - lua_processor@ts_cmd_P
   translators:
-    - translator@ts_cmd_T
+    - lua_translator@ts_cmd_T
 
 speller:
   alphabet: abcdefghijklmnopqrstuvwxyz$ # alphabet中要包含命提示符、這裏只是一個示例、請在實際的alphabet中添加$
