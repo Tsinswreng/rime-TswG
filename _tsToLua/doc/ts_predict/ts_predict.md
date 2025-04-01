@@ -256,3 +256,13 @@ translator:
 4. 將`prd.reverse.bin`文件複製到指定目錄下(默認潙`<rime-user-dir>/build_`、需與配置的目錄一致)
 
 完成。
+
+
+**注意事項:**
+
+被動聯想功能 因需要在lua_filter中延遲產生(`yield`)候選、故可能造成卡頓。
+
+建議您同時啓用[ts_limitFilter](_tsToLua/doc/ts_limitFilter/ts_limitFilter.md)模塊來限制候選產生的數量
+
+或者不使用被動聯想功能。
+

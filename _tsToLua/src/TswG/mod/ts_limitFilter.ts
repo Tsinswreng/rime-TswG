@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2024 TsinswrengGwāng <tsinswreng@qq.com>
+ * Copyright (c) 2024 TsinswrengGwāng <Tsinswreng@qq.com>
  * This code is licensed under MIT License.
  * https://github.com/Tsinswreng/rime-TswG
  * 
-*/
+ */
 
 import * as Module from '@/module'
-import * as Ut from '@/ts_Ut'
+
 
 class Opt{
 	static new(){
